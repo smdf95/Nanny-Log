@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<div class="form_container">
+    <form class="login_form" method="POST" action="">
+        <h2>Activities</h2>
+        {{ form.hidden_tag() }}
+            {{ form.duration(placeholder="Duration in Minutes") }}
+            {{ form.description(placeholder="Description") }}
+            {{ form.picture.label }}{{form.picture }}
+            {{ form.submit() }}
+        
+    </form>
+</div>
+
+
+{% endblock %}

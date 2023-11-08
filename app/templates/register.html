@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<div class="form_container">
+    <form class="login_form" method="POST" action="">
+        <h2>Register</h2>
+        {{ form.hidden_tag() }}
+            {{ form.email(placeholder="Email") }}
+            {{ form.first_name(placeholder="First Name") }}
+            {{ form.last_name(placeholder="Last Name") }}
+            {% if form.role.errors %}
+                <ul class="errors">
+                    {% for error in form.role.errors %}
+                        <li>{{ error }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            {{ form.role }}
+            {{ form.password(placeholder="Password") }}
+            {{ form.password2(placeholder="Confirm Password")}}
+            <button type="submit" class="neat-submit-button">Register</button>
+        <p>Already a member? <a href="{{ url_for('login') }}">Sign in</a></p>
+    </form>
+</div>
+
+{% endblock %}

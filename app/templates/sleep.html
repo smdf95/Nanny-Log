@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<div class="form_container">
+    <form class="login_form" method="POST" action="">
+        <h2>Sleep</h2>
+        {{ form.hidden_tag() }}
+            {{ form.child.label }}
+            {{ form.child }}
+            {{ form.sleep_start(placeholder="Sleep Start") }}
+            {{ form.sleep_end(placeholder="Sleep End") }}
+            {{ form.submit() }}
+        
+    </form>
+</div>
+
+
+{% endblock %}

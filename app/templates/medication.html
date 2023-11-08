@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<div class="form_container">
+    <form class="login_form" method="POST" action="">
+        <h2>Medication</h2>
+        {{ form.hidden_tag() }}
+            {{ form.child.label }}
+            {{ form.child }}
+            {{ form.medication_name(placeholder="Medication Name") }}
+            {{ form.amount(placeholder="Dosage") }}
+            {{ form.time_given(placeholder="Time Given") }}
+            {{ form.reason(placeholder="Reason for medication(if any)") }}
+            {{ form.submit() }}
+
+    </form>
+</div>
+
+
+{% endblock %}
