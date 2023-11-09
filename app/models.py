@@ -18,6 +18,23 @@ class Company(db.Model):
     def __repr__(self):
         return '<Company %r>' % self.name
 
+
+
+manager_child = db.Table('manager_child',
+    db.Column('manager_id', db.Integer, db.ForeignKey('managers.manager_id')),
+    db.Column('child_id', db.Integer, db.ForeignKey('children.child_id'))
+)
+
+manager_parent = db.Table('manager_parent',
+    db.Column('manager_id', db.Integer, db.ForeignKey('managers.manager_id')),
+    db.Column('parent_id', db.Integer, db.ForeignKey('parents.parent_id'))
+)
+
+manager_nanny = db.Table('manager_nanny',
+    db.Column('manager_id', db.Integer, db.ForeignKey('managers.manager_id')),
+    db.Column('nanny_id', db.Integer, db.ForeignKey('nannies.nanny_id'))
+)
+
 class User(db.Model, UserMixin):
     __tablename__ = 'users'
 
@@ -35,7 +52,7 @@ class User(db.Model, UserMixin):
     
     def get_id(self):
         return str(self.user_id)
-
+    
 
 class Manager(db.Model):
     __tablename__ = 'managers'
@@ -43,10 +60,15 @@ class Manager(db.Model):
     manager_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
 
+    children = db.relationship('Child', secondary='manager_child', backref=db.backref('managers', lazy=True))
+    parent = db.relationship('Parent', secondary='manager_parent', backref=db.backref('managers', lazy=True))
+    nanny = db.relationship('Nanny', secondary='manager_nanny', backref=db.backref('managers', lazy=True))
+
+
     def __repr__(self):
         return f"Manager('{self.name}', '{self.company_id}')"
     
-family = db.Table('nanny_child',
+nanny_child = db.Table('nanny_child',
     db.Column('nanny_id', db.Integer, db.ForeignKey('nannies.nanny_id')),
     db.Column('child_id', db.Integer, db.ForeignKey('children.child_id'))
 )
@@ -59,8 +81,6 @@ class Nanny(db.Model):
     manager_id = db.Column(db.Integer, db.ForeignKey('managers.manager_id'))
 
     user = db.relationship('User', backref=db.backref('nanny', lazy=True), foreign_keys=[user_id])
-    manager = db.relationship('Manager', backref=db.backref('nanny', lazy=True), foreign_keys=[manager_id])
-
     children = db.relationship('Child', secondary='nanny_child', backref=db.backref('nannies', lazy=True))
 
     def __repr__(self):

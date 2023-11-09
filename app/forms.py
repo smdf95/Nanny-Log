@@ -114,3 +114,12 @@ class SleepForm(FlaskForm):
     sleep_start = StringField('Sleep Start', validators=[DataRequired()])
     sleep_end = StringField('Sleep End', validators=[DataRequired()])
     submit = SubmitField('Submit')
+
+class AssignChild(FlaskForm):
+    """
+    Form for assigning children to parents and nannies
+    """
+    child = SelectField('Select Child')
+    parent = SelectField('Select Parent')
+    nanny = SelectField('Select Nanny')
+    submit = SubmitField('Submit')

@@ -15,13 +15,13 @@
                     <div class="profile_picture">
                         {% for child in event.children %}
                         <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
-                        {% endfor %}
                     </div>
                     <div class="activity">
                         <h4>Activity</h4>
                         <p class="description">
-                            {{ activity.description }}
+                            {{child.first_name }} {{ activity.description }} for {{ activity.duration }} minutes.
                         </p>
+                        {% endfor %}
                         <p class="timestamp">
                             {{ event.event_time|format_date }}
                         </p>

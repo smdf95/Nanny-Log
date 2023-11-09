@@ -6,6 +6,8 @@
     <form class="login_form" method="POST" action="">
         <h2>Activities</h2>
         {{ form.hidden_tag() }}
+            {{ form.child.label }}
+            {{ form.child }}
             {{ form.duration(placeholder="Duration in Minutes") }}
             {{ form.description(placeholder="Description") }}
             {{ form.picture.label }}{{form.picture }}

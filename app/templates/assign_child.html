@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block main %}
+
+<div class="form_container">
+    <form class="login_form" method="POST" action="">
+        <h2>Assign Children to Parents/Nannies</h2>
+        {{ form.hidden_tag() }}
+            {{ form.child.label }}
+            {{ form.child }}
+            {{ form.parent.label }}
+            {{ form.parent }}
+            {{ form.nanny.label }}
+            {{ form.nanny }}
+            {{ form.submit }}
+
+
+    </form>
+</div>
+
+
+{% endblock %}

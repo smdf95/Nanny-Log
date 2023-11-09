@@ -30,7 +30,14 @@
                 </div>
                 <ul>
                     <li><a href="{{ url_for('index') }}">Home</a></li>
-                    <li><a href="{{ url_for('index') }}">My Kids</a></li>
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.role == 'nanny' or current_user.role == 'parent' %}
+                            <li><a href="{{ url_for('index') }}">My Kids</a></li>
+                        {% endif %}
+                        {% if current_user.role == 'manager' %}
+                            <li><a href="{{ url_for('assign_child') }}">Assign Child</a></li>
+                        {% endif %}
+                    {% endif %}
                 </ul>
             </div>
             <div class="login">
