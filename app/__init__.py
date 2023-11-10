@@ -1,7 +1,11 @@
-from flask import Flask
+from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
+from datetime import datetime, timedelta
+from flask_login import login_user, current_user, logout_user, login_required
+
+
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecret'
@@ -10,4 +14,49 @@ db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
 
-from app import routes
+from app.models import User, Nanny, Parent, Manager, Parent, Activity, Event, Sleep, Child, Food, Developmental, Incident, Medication, Nappy, Note
+from .routes.event_routes import events_blueprint
+from .routes.main_routes import main_blueprint
+app.register_blueprint(events_blueprint)
+app.register_blueprint(main_blueprint)
+
+@app.template_filter('format_date')
+def format_date(event_time):
+    today = datetime.now().date()
+    yesterday = today - timedelta(days=1)
+    three_days_ago = yesterday - timedelta(days=2)
+    
+    if event_time.date() == today:
+        return f"Today at {event_time.strftime('%H:%M')}"
+    elif event_time.date() == yesterday:
+        return f"Yesterday at {event_time.strftime('%H:%M')}"
+    elif event_time.date() >= (three_days_ago):
+        return event_time.strftime('%A')  # Format the day name using strftime
+    else:
+        return event_time .strftime('%d/%m/%y') # Return the original date for other cases
+
+app.jinja_env.filters['format_date'] = format_date
+
+@app.route('/')
+@app.route('/index')
+def index():
+    
+    if current_user.is_authenticated:
+
+        current_id = current_user.user_id
+        if current_user.role == 'nanny':
+            nanny = Nanny.query.filter_by(user_id=current_id).first()
+            child_ids = [child.child_id for child in nanny.children]
+        elif current_user.role == 'manager':
+            manager = Manager.query.filter_by(user_id=current_id).first()
+            child_ids = [child.child_id for child in manager.children]
+        elif current_user.role == 'parent':
+            parent = Parent.query.filter_by(user_id=current_id).first()
+            child_ids = [child.child_id for child in parent.children]
+
+        
+        events = Event.query.filter(Event.child_id.in_(child_ids)).order_by(Event.event_time.desc()).all()
+        return render_template('index.html', title='Home', events=events, now=datetime.now())
+    
+    else:
+        return render_template('index.html', title='Home', now=datetime.now())

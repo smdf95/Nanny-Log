@@ -223,7 +223,7 @@ class Event(db.Model):
     child_id = db.Column(db.Integer, db.ForeignKey('children.child_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
 
-    children = db.relationship('Child', secondary=events_child, backref='events')
+    children = db.relationship('Child', backref=db.backref('events, lazy=True'))
 
     activities = db.relationship("Activity", backref=db.backref('event', lazy=True))
     developmentals = db.relationship("Developmental", backref=db.backref('event', lazy=True))

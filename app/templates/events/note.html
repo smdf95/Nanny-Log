@@ -6,10 +6,18 @@
     <form class="login_form" method="POST" action="">
         <h2>Note</h2>
         {{ form.hidden_tag() }}
-            {{ form.child.label }}
-            {{ form.child }}
-            {{ form.description(placeholder="Write Note Here...") }}
-            {{ form.submit() }}
+        <ul>
+            {% for choice, label in form.child.choices %}
+                <li>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" name="{{ form.child.name }}" value="{{ choice }}">
+                        <span class="custom-checkbox-label">{{ label }}</span>
+                    </label>
+                </li>
+            {% endfor %}
+        </ul>
+        {{ form.description(placeholder="Write Note Here...") }}
+        {{ form.submit() }}
         
     </form>
 </div>

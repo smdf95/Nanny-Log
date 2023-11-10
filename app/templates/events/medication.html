@@ -6,13 +6,21 @@
     <form class="login_form" method="POST" action="">
         <h2>Medication</h2>
         {{ form.hidden_tag() }}
-            {{ form.child.label }}
-            {{ form.child }}
-            {{ form.medication_name(placeholder="Medication Name") }}
-            {{ form.amount(placeholder="Dosage") }}
-            {{ form.time_given(placeholder="Time Given") }}
-            {{ form.reason(placeholder="Reason for medication(if any)") }}
-            {{ form.submit() }}
+        <ul>
+            {% for choice, label in form.child.choices %}
+                <li>
+                    <label class="custom-checkbox">
+                        <input type="checkbox" name="{{ form.child.name }}" value="{{ choice }}">
+                        <span class="custom-checkbox-label">{{ label }}</span>
+                    </label>
+                </li>
+            {% endfor %}
+        </ul>
+        {{ form.medication_name(placeholder="Medication Name") }}
+        {{ form.amount(placeholder="Dosage") }}
+        {{ form.time_given(placeholder="Time Given") }}
+        {{ form.reason(placeholder="Reason for medication(if any)") }}
+        {{ form.submit() }}
 
     </form>
 </div>

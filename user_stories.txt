@@ -1,4 +1,4 @@
--As a Manager, I would like to be able to create accounts for parents, children, and nannies
+[Done] As a Manager, I would like to be able to create accounts for parents, children, and nannies
 -As a Manager, I would like to be able to add and remove parents, children, and nannies
 -As a Manager, I would like to be able to reassign children to other nannies
 -As a Manager, I would like to be able to view all employees and who they are assigned to
@@ -6,23 +6,23 @@
 -As a Manager, I would like to be able to view all parents
 
 
--As a Nanny, I would like to be able to edit parts of my profile
--As a Nanny, I would like to be able to create Activity Logs that detail the child's activities
--As a Nanny, I would like to be able to create Food logs that detail what the child has eaten and when
--As a Nanny, I would like to be able to record bottle feeds if the child is young
--As a Nanny, I would like to be able to create Sleep Logs that detail the child's sleep
--As a Nanny, I would like to be able to create Nappy Logs that detail the conditions of a child's nappies
--As a Nanny, I would like to be able to record the health of the Child
--As a Nanny, I would like to be able to update medication given
--As a Nanny, I would like to be able to record the Child's behaviour in a journal
--As a Nanny, I would like to be able to record developmental milestones
+[Done]As a Nanny, I would like to be able to edit parts of my profile
+[Done]As a Nanny, I would like to be able to create Activity Logs that detail the child's activities
+[Done]As a Nanny, I would like to be able to create Food logs that detail what the child has eaten and when
+[Done]As a Nanny, I would like to be able to record bottle feeds if the child is young
+[Done]As a Nanny, I would like to be able to create Sleep Logs that detail the child's sleep
+[Done]As a Nanny, I would like to be able to create Nappy Logs that detail the conditions of a child's nappies
+[Done]As a Nanny, I would like to be able to record incidents
+[Done]As a Nanny, I would like to be able to update medication given
+[Done]As a Nanny, I would like to be able to record the Child's behaviour in a journal
+[Done]As a Nanny, I would like to be able to record developmental milestones
 -As a Nanny, I would like to be able to add photos of the Child with a caption
--As a Nanny, I would like to be able to assign multiple children when creating a log
+[Done]As a Nanny, I would like to be able to assign multiple children when creating a log
 
--As a Parent, I would like to be able to view the child's log feed
+[Done]As a Parent, I would like to be able to view the child's log feed
 -As a Parent, I would like to be able to comment on each log
 
 -Logs should have different colours depending on the type of log
--Logs should contain picture of the child
+[Done]Logs should contain picture of the child
 
 -Add a log by clicking a plus button in the bottom corner and have the options of what to add float up
