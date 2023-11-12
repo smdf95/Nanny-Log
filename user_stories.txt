@@ -1,9 +1,9 @@
 [Done] As a Manager, I would like to be able to create accounts for parents, children, and nannies
 -As a Manager, I would like to be able to add and remove parents, children, and nannies
 -As a Manager, I would like to be able to reassign children to other nannies
--As a Manager, I would like to be able to view all employees and who they are assigned to
--As a Manager, I would like to be able to view all children and who is assigned to them
--As a Manager, I would like to be able to view all parents
+[Done]As a Manager, I would like to be able to view all employees and who they are assigned to
+[Done]As a Manager, I would like to be able to view all children and who is assigned to them
+[Done]As a Manager, I would like to be able to view all parents
 
 
 [Done]As a Nanny, I would like to be able to edit parts of my profile

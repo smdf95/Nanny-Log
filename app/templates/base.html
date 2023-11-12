@@ -37,6 +37,7 @@
                         {% if current_user.role == 'manager' %}
                             <li><a href="{{ url_for('main.assign_child') }}">Assign Child</a></li>
                             <li><a href="{{ url_for('main.add_child') }}">Add Child</a></li>
+                            <li><a href="{{ url_for('main.view_profiles') }}">View Profiles</a></li>
                         {% endif %}
                     {% endif %}
                 </ul>

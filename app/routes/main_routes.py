@@ -4,7 +4,7 @@ from PIL import Image
 from flask import render_template, request, redirect, url_for, flash, Blueprint
 from app import app, db, bcrypt, login_manager
 from app.forms import LoginForm, RegistrationForm, ChildForm, AssignChild, UpdateProfileForm
-from app.models import User, Nanny, Parent, Manager, Parent, Child
+from app.models import User, Nanny, Parent, Manager, Parent, Child, Event
 from flask_login import login_user, current_user, logout_user, login_required
 
 main_blueprint = Blueprint('main', __name__)
@@ -148,12 +148,12 @@ def assign_child():
     if form.validate_on_submit():
         child_id = form.child.data
         child = Child.query.filter_by(child_id=child_id).first()
-        if form.parent.data:
+        if form.parent.data is not None and form.parent.data != 'None':
             parents = get_assigned_parents(manager, form.parent.data)
             for parent in parents:
                 child.parents.append(parent)
-                
-        elif form.nanny.data:
+
+        elif form.nanny.data is not None and form.nanny.data != 'None':
             nannies = get_assigned_nannies(manager, form.nanny.data)
             for nanny in nannies:
                 child.nannies.append(nanny)
@@ -222,3 +222,19 @@ def profile():
         form.last_name.data = current_user.last_name
         form.email.data = current_user.email
     return render_template('profile.html', title='Profile', form=form, user_image=user_image)
+
+@main_blueprint.route('/view_profiles', methods=['GET', 'POST'])
+@login_required
+def view_profiles():
+    current_id = current_user.user_id
+    manager = Manager.query.filter_by(user_id=current_id).first()
+    return render_template('view_profiles.html', title='View Profiles', manager=manager)
+
+@main_blueprint.route('/child_profile/<int:child_id>')
+def child_profile(child_id):
+    page = request.args.get('page', 1, type=int)
+    kid = Child.query.get_or_404(child_id)
+    events = Event.query.filter_by(child_id=kid.child_id)\
+                    .order_by(Event.event_time.desc())\
+                    .paginate(page=page, per_page=10)
+    return render_template('child_profile.html', title=kid.first_name, events=events, child=kid)

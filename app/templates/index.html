@@ -3,15 +3,14 @@
 {% block main %}
 {% if current_user.is_authenticated %}
     <h1>Hello {{ current_user.first_name }}</h1>
-{% else %}
-    <h1>Welcome</h1>
-{% endif %}
+
 
 <div class="feed">
-    {% for event in events %}
+    {% for event in events.items %}
         {% if event.activities %}
             {% for activity in event.activities %}
                 <div class="log">
+                    <a href="{{ url_for('main.child_profile', child_id=event.children.child_id )}}">
                     <div class="profile_picture">
                         <img src="{{ url_for('static', filename='profile_pics/' + event.children.picture) }}" alt="Child Picture">
                     </div>
@@ -24,6 +23,7 @@
                             {{ event.event_time|format_date }}
                         </p>
                     </div>
+                </a>
                 </div>
             {% endfor %}
         {% endif %}
@@ -193,6 +193,22 @@
             {% endfor %}
         {% endif %}
     {% endfor %}
+    {% if events.pages > 1 %}
+        <div class="pagination">
+            {% for page_num in events.iter_pages() %}
+                {% if page_num %}
+                    {% if events.page == page_num %}
+                        <a class="active_page" href="{{ url_for('index', page=page_num) }}">{{ page_num }}</a>
+                    {% else %}
+                        <a class="inactive_page" href="{{ url_for('index', page=page_num) }}">{{ page_num }}</a>
+                    {% endif %}
+                {% else %}
+                    <span class="ellipsis">...</span>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+
 </div>
 
 
@@ -204,4 +220,9 @@
 <h2><a href="{{ url_for('events.nappy') }}">Nappy</a></h2>
 <h2><a href="{{ url_for('events.note') }}">Note</a></h2>
 <h2><a href="{{ url_for('events.sleep') }}">Sleep</a></h2>
+
+{% else %}
+    <h1>Welcome</h1>
+{% endif %}
+
 {% endblock %}

@@ -262,3 +262,7 @@ input:focus {
     border-radius: 50%;
     margin: 20px;
 }
+
+.active_page {
+    font-weight: 600;
+}

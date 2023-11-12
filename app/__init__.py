@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
@@ -44,18 +44,28 @@ def index():
     if current_user.is_authenticated:
 
         current_id = current_user.user_id
+        child_ids = []
+
         if current_user.role == 'nanny':
             nanny = Nanny.query.filter_by(user_id=current_id).first()
-            child_ids = [child.child_id for child in nanny.children]
+            if nanny:
+                child_ids = [child.child_id for child in nanny.children]
         elif current_user.role == 'manager':
             manager = Manager.query.filter_by(user_id=current_id).first()
-            child_ids = [child.child_id for child in manager.children]
+            if manager:
+            
+                child_ids = [child.child_id for child in manager.children]
         elif current_user.role == 'parent':
             parent = Parent.query.filter_by(user_id=current_id).first()
-            child_ids = [child.child_id for child in parent.children]
+            if parent:
 
+                child_ids = [child.child_id for child in parent.children]
+
+        page = request.args.get('page', 1, type=int)
         
-        events = Event.query.filter(Event.child_id.in_(child_ids)).order_by(Event.event_time.desc()).all()
+        events = Event.query.filter(Event.child_id.in_(child_ids))\
+                    .order_by(Event.event_time.desc())\
+                    .paginate(page=page, per_page=15)
         return render_template('index.html', title='Home', events=events, now=datetime.now())
     
     else:

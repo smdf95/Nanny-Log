@@ -61,8 +61,8 @@ class Manager(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
 
     children = db.relationship('Child', secondary='manager_child', backref=db.backref('managers', lazy=True))
-    parent = db.relationship('Parent', secondary='manager_parent', backref=db.backref('managers', lazy=True))
-    nanny = db.relationship('Nanny', secondary='manager_nanny', backref=db.backref('managers', lazy=True))
+    parents = db.relationship('Parent', secondary='manager_parent', backref=db.backref('managers', lazy=True))
+    nannies = db.relationship('Nanny', secondary='manager_nanny', backref=db.backref('managers', lazy=True))
 
 
     def __repr__(self):

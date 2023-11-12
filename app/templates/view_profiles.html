@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <h1>Children</h1>
+        {% for child in manager.children %}
+            <div class="profile">
+                <a href="{{ url_for('main.child_profile', child_id=child.child_id) }}">
+                <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="{{ child.first_name }}" width="100" height="100">
+                {{ child.first_name }}
+                {{ child.last_name }}
+                {{ child.dob }}
+                </a>
+            </div>
+        {% endfor %}
+        <h1>Parents</h1>
+        {% for parent in manager.parents %}
+            <div class="profile">
+                <img src="{{ url_for('static', filename='profile_pics/' + parent.user.picture) }}" alt="{{ parent.user.first_name }} Picture" width="100" height="100">
+                {{ parent.user.first_name }}
+                {{ parent.user.last_name }}
+                {{ parent.user.email }}
+                {% if parent.children %}
+                    <p>Children:</p>
+                    {% for child in parent.children %}
+                        {{ child.first_name }} {{child.last_name }}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% endfor %}
+        <h1>Nannies</h1>
+        {% for nanny in manager.nannies %}
+            <div class="profile">
+                <img src="{{ url_for('static', filename='profile_pics/' + nanny.user.picture) }}" alt="{{ nanny.user.first_name }} Picture" width="100" height="100">
+                {{ nanny.user.first_name }}
+                {{ nanny.user.last_name }}
+                {{ nanny.user.email }}
+                {% if nanny.children %}
+                    <p>Children:</p>
+                    {% for child in nanny.children %}
+                        {{ child.first_name }} {{child.last_name }}
+                    {% endfor %}
+                {% endif %}
+            </div>
+        {% endfor %}
+{% endblock %}
