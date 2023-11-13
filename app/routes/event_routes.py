@@ -2,13 +2,40 @@ import os
 import secrets
 from PIL import Image
 from datetime import datetime
-from flask import render_template, redirect, url_for, flash, Blueprint, request
+from functools import wraps
+from flask import render_template, redirect, url_for, flash, Blueprint, request, abort
 from app import app, db
-from app.forms import ActivitiesForm, SleepForm, FoodForm, DevelopmentalForm, IncidentForm, MedicationForm, NappyForm, NoteForm
-from app.models import Nanny, Manager, Child, Activity, Event, Sleep, Food, Developmental, Incident, Medication, Nappy, Note
+from app.forms import ActivitiesForm, SleepForm, FoodForm, DevelopmentalForm, IncidentForm, MedicationForm, NappyForm, NoteForm, CommentForm, PictureForm
+from app.models import Nanny, Manager, Parent, User, Child, Activity, Event, Sleep, Food, Developmental, Incident, Medication, Nappy, Note, Comment, Picture
 from flask_login import current_user, login_required
 
 events_blueprint = Blueprint('events', __name__)
+
+def association_required(func):
+    @wraps(func)
+    def decorated_function(child_id, *args, **kwargs):
+        current_id = current_user.user_id
+        child = Child.query.filter_by(child_id=child_id).first()
+
+        if current_user.role == 'manager':
+            manager = Manager.query.filter_by(user_id=current_id).first()
+            if manager is None or manager.children is None or child not in manager.children:
+                abort(403)  # Forbidden
+        elif current_user.role == 'nanny':
+            nanny = Nanny.query.filter_by(user_id=current_id).first()
+            if nanny is None or nanny.children is None or child not in nanny.children:
+                abort(403)  # Forbidden
+        elif current_user.role == 'parent':
+            parent = Parent.query.filter_by(user_id=current_id).first()
+            if parent is None or parent.children is None or child not in parent.children:
+                abort(403)  # Forbidden
+        else:
+            # Handle unrecognized role (you may customize this part)
+            abort(403)  # Forbidden
+
+        return func(child_id, *args, **kwargs)
+
+    return decorated_function
 
 def save_event_picture(form_picture):
     random_hex = secrets.token_hex(8)
@@ -369,6 +396,58 @@ def note():
             return redirect(url_for('index'))
     return render_template('events/note.html', title='Note', form=form)
 
+@events_blueprint.route('/picture', methods=['GET', 'POST'])
+@login_required
+def picture():
+    form = PictureForm()
+
+    current_id = current_user.user_id
+    if current_user.role == 'nanny':
+        nanny = Nanny.query.filter_by(user_id=current_id).first()
+        form.child.choices = [
+            (child.child_id, f"{child.first_name} {child.last_name}") for child in nanny.children
+        ]
+    elif current_user.role == 'manager':
+        manager = Manager.query.filter_by(user_id=current_id).first()
+        form.child.choices = [
+            (child.child_id, f"{child.first_name} {child.last_name}") for child in manager.children
+        ]
+
+
+    if request.method == 'POST':
+        if form.validate_on_submit():
+            selected_child_ids = form.child.data
+            selected_children = get_assigned_children(current_user, selected_child_ids)
+            
+
+            for kid in selected_children:
+                event = Event(
+                    event_time=datetime.now(),
+                    event_type='Picture',
+                    user_id=current_id,
+                    child_id=kid.child_id,
+                )
+                db.session.add(event)
+                db.session.commit()
+                if form.picture.data:
+                    picture_file = save_event_picture(form.picture.data)
+                    picture = Picture(
+                        caption=form.caption.data,
+                        picture_file=picture_file,
+                        event_id=event.event_id
+
+                    )
+                else:
+                    picture = Picture(
+                        caption=form.caption.data,
+                        event_id=event.event_id
+                    )
+
+                db.session.add(picture)
+                db.session.commit()
+            return redirect(url_for('index'))
+    return render_template('events/picture.html', title='Picture', form=form)
+
 @events_blueprint.route('/sleep', methods=['GET', 'POST'])
 @login_required
 def sleep():
@@ -412,3 +491,24 @@ def sleep():
             return redirect(url_for('index'))
     return render_template('events/sleep.html', title='Sleep', 
     form=form)
+
+
+@events_blueprint.route('/post/<int:event_id>', methods=['GET', 'POST'])
+@login_required
+def post(event_id):
+    event = Event.query.get(event_id)
+    comments = Comment.query.filter_by(event_id=event_id).order_by(Comment.comment_time.desc()).all()
+    
+
+    form = CommentForm()
+    if form.validate_on_submit():
+        comment_to_add = Comment(
+            comment_time=datetime.now(),
+            comment_text=form.comment_text.data,
+            event_id=event_id,
+            user_id=current_user.user_id
+        )
+        db.session.add(comment_to_add)
+        db.session.commit()
+        return redirect(url_for('events.post', event_id=event_id))
+    return render_template('events/post.html', title='Post', event=event, comments=comments, form=form, User=User)

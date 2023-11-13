@@ -42,7 +42,7 @@ class User(db.Model, UserMixin):
     first_name = db.Column(db.String(64), index=True, nullable=False)
     last_name = db.Column(db.String(64), index=True, nullable=False)
     email = db.Column(db.String(120), index=True, unique=True)
-    picture = db.Column(db.String(20), nullable=True, default='default.jpg')
+    picture = db.Column(db.String(20), nullable=True, default='default.png')
     role = db.Column(db.String(10), nullable=False)
     password = db.Column(db.String(128))
     company_id = db.Column(db.Integer, db.ForeignKey('companies.company_id'))
@@ -119,7 +119,7 @@ class Child(db.Model):
     last_name = db.Column(db.String(64), nullable=False)
     dob = db.Column(db.Date, nullable=False)
     gender = db.Column(db.String(2), nullable=False)
-    picture = db.Column(db.String(120), nullable=True, default='default.jpg')
+    picture = db.Column(db.String(120), nullable=True, default='default.png')
 
     def __repr__(self):
         parents_names = ', '.join(parent.first_name for parent in self.parents)
@@ -199,6 +199,16 @@ class Note(db.Model):
     event_id = db.Column(db.Integer, db.ForeignKey('events.event_id'))
 
 
+class Picture(db.Model):
+    __tablename__ = 'pictures'
+
+    picture_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    caption = db.Column(db.String(100), nullable=False)
+    picture_file = db.Column(db.String(20), nullable=True)
+
+    # Relationships
+    event_id = db.Column(db.Integer, db.ForeignKey('events.event_id'))
+
 class Sleep(db.Model):
     __tablename__ = 'sleeps'
 
@@ -208,6 +218,7 @@ class Sleep(db.Model):
 
     # Relationships
     event_id = db.Column(db.Integer, db.ForeignKey('events.event_id'))
+
     
 
 
@@ -232,4 +243,16 @@ class Event(db.Model):
     medications = db.relationship("Medication", backref=db.backref('event', lazy=True))
     nappies = db.relationship("Nappy", backref=db.backref('event', lazy=True))
     notes = db.relationship("Note", backref=db.backref('event', lazy=True))
+    pictures = db.relationship("Picture", backref=db.backref('event', lazy=True))
     sleeps = db.relationship("Sleep", backref=db.backref('event', lazy=True))
+
+class Comment(db.Model):
+    __tablename__ = 'comments'
+
+    comment_id = db.Column(db.Integer, primary_key=True, autoincrement=True)
+    comment_time = db.Column(db.DateTime, nullable=False)
+    comment_text = db.Column(db.String(255), nullable=False)
+
+    # Relationships
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    event_id = db.Column(db.Integer, db.ForeignKey('events.event_id'))

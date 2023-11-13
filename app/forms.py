@@ -129,6 +129,15 @@ class NoteForm(FlaskForm):
     description = StringField('Description', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
+class PictureForm(FlaskForm):
+    """
+    Picture form
+    """
+    child = SelectMultipleField('Select Children', coerce=int, widget=widgets.ListWidget(prefix_label=False), option_widget=widgets.CheckboxInput())
+    caption = StringField('Caption', validators=[DataRequired(), Length(max=100)])
+    picture = FileField('Picture', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
+    submit = SubmitField('Submit')
+
 class SleepForm(FlaskForm):
     """
     Sleep form
@@ -146,3 +155,11 @@ class AssignChild(FlaskForm):
     parent = SelectField('Select Parent')
     nanny = SelectField('Select Nanny')
     submit = SubmitField('Submit')
+
+class CommentForm(FlaskForm):
+    """
+    Comment form
+    """
+    comment_text = StringField('Comment Text', validators=[DataRequired(), Length(min=1, max=255)])
+    submit = SubmitField('Submit')
+

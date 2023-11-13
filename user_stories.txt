@@ -1,6 +1,6 @@
 [Done] As a Manager, I would like to be able to create accounts for parents, children, and nannies
--As a Manager, I would like to be able to add and remove parents, children, and nannies
--As a Manager, I would like to be able to reassign children to other nannies
+[Done]As a Manager, I would like to be able to add and remove parents, children, and nannies
+[Done]As a Manager, I would like to be able to reassign children to other nannies
 [Done]As a Manager, I would like to be able to view all employees and who they are assigned to
 [Done]As a Manager, I would like to be able to view all children and who is assigned to them
 [Done]As a Manager, I would like to be able to view all parents
@@ -16,13 +16,20 @@
 [Done]As a Nanny, I would like to be able to update medication given
 [Done]As a Nanny, I would like to be able to record the Child's behaviour in a journal
 [Done]As a Nanny, I would like to be able to record developmental milestones
--As a Nanny, I would like to be able to add photos of the Child with a caption
+[Done]As a Nanny, I would like to be able to add photos of the Child with a caption
 [Done]As a Nanny, I would like to be able to assign multiple children when creating a log
 
 [Done]As a Parent, I would like to be able to view the child's log feed
--As a Parent, I would like to be able to comment on each log
+[Done]As a Parent, I would like to be able to comment on each log
 
 -Logs should have different colours depending on the type of log
 [Done]Logs should contain picture of the child
 
 -Add a log by clicking a plus button in the bottom corner and have the options of what to add float up
+
+
+TODO:
+Add forgot password route
+Add change password to profile
+[Done]Add comments to posts
+[Done]Add picture table

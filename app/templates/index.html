@@ -7,191 +7,203 @@
 
 <div class="feed">
     {% for event in events.items %}
+    <div class="log">
+        <a href="{{ url_for('main.child_profile', child_id=event.children.child_id )}}">
+        <div class="profile_picture">
+            <img src="{{ url_for('static', filename='profile_pics/' + event.children.picture) }}" alt="Child Picture">
+        </div>
+        </a>
         {% if event.activities %}
             {% for activity in event.activities %}
-                <div class="log">
-                    <a href="{{ url_for('main.child_profile', child_id=event.children.child_id )}}">
-                    <div class="profile_picture">
-                        <img src="{{ url_for('static', filename='profile_pics/' + event.children.picture) }}" alt="Child Picture">
-                    </div>
                     <div class="activity">
-                        <h4>Activity</h4>
-                        <p class="description">
-                            {{ event.children.first_name }} {{ activity.description }} for {{ activity.duration }} minutes.
-                        </p>
-                        <p class="timestamp">
-                            {{ event.event_time|format_date }}
-                        </p>
+                        <a href="{{ url_for('events.post', event_id=activity.event_id) }}">
+
+                            <h4>Activity</h4>
+                            <p class="description">
+                                {{ event.children.first_name }} {{ activity.description }} for {{ activity.duration }} minutes.
+                            </p>
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
+                        </a>
                     </div>
-                </a>
-                </div>
             {% endfor %}
         {% endif %}
         {% if event.sleeps %}
             {% for sleep in event.sleeps %}
-                <div class="log">
-                    <div class="profile_picture">
-                        <img src="{{ url_for('static', filename='profile_pics/' + event.children.picture) }}" alt="Child Picture">
-                    </div>
                     <div class="sleep">
-                        <h4>Sleep</h4>
-    
-                        <p class="description">
-                            {{event.children.first_name}} went to sleep at {{ sleep.sleep_start }} and woke up at {{ sleep.sleep_end }}.
-                        </p>
-                        <p class="timestamp">
-                            {{ event.event_time|format_date }}
-                        </p>
+                        <a href="{{ url_for('events.post', event_id=sleep.event_id) }}">
+
+                            <h4>Sleep</h4>
+        
+                            <p class="description">
+                                {{event.children.first_name}} went to sleep at {{ sleep.sleep_start }} and woke up at {{ sleep.sleep_end }}.
+                            </p>
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
+                        </a>
                     </div>
-                </div>
             {% endfor %}
         {% endif %}
         {% if event.foods %}
             {% for food in event.foods %}
-                <div class="log">
-                    <div class="profile_picture">
-                            <img src="{{ url_for('static', filename='profile_pics/' + event.children.picture) }}" alt="Child Picture">
-                    </div>
+                
                     <div class="food">
-                        <h4>{{ food.meal_type | capitalize }}</h4>
+                        <a href="{{ url_for('events.post', event_id=food.event_id) }}">
+
+                            <h4>{{ food.meal_type | capitalize }}</h4>
+        
+                            <p class="description">
+                                {% if event.children.gender == "m" %}
+                                    {{event.children.first_name}} had {{ food.description }} for his {{ food.meal_type }}.
+                                {% elif event.children.gender == "f" %}
+                                    {{event.children.first_name}} had {{ food.description }} for her {{ food.meal_type }}.
+                                {% else %}
+                                    {{event.children.first_name}} had {{ food.description }} for their {{ food.meal_type }}.
+                                {% endif %}
     
-                        <p class="description">
-                            {% if event.children.gender == "m" %}
-                                {{event.children.first_name}} had {{ food.description }} for his {{ food.meal_type }}.
-                            {% elif event.children.gender == "f" %}
-                                {{event.children.first_name}} had {{ food.description }} for her {{ food.meal_type }}.
-                            {% else %}
-                                {{event.children.first_name}} had {{ food.description }} for their {{ food.meal_type }}.
+                            </p>
+                            {% if food.picture %}
+                                <img src="{{ url_for('static', filename='event_pics/' + food.picture) }}" alt="Food">
                             {% endif %}
-
-                        </p>
-                        {% if food.picture %}
-                            <img src="{{ url_for('static', filename='food_pics/' + food.picture) }}" alt="Food">
-                        {% endif %}
-
-                        <p class="timestamp">
-                            {{ event.event_time|format_date }}
-                        </p>
+    
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
+                        </a>
                     </div>
-                </div>
             {% endfor %}
         {% endif %}
         {% if event.developmentals %}
             {% for developmental in event.developmentals %}
-                <div class="log">
-                    <div class="profile_picture">
-                            <img src="{{ url_for('static', filename='profile_pics/' + event.children.picture) }}" alt="Child Picture">
-                    </div>
+                
                     <div class="developmental">
-                        <h4>Developmental Milestone</h4>
-    
-                        <p class="description">
-                            {{event.children.first_name}} {{developmental.description}}.
-                        </p>
-                        {% if developmental.picture %}
-                            <img src="{{ url_for('static', filename='event_pics/' + food.picture) }}" alt="Developmental">
-                        {% endif %}
+                        <a href="{{ url_for('events.post', event_id=developmental.event_id) }}">
 
-                        <p class="timestamp">
-                            {{ event.event_time|format_date }}
-                        </p>
+                            <h4>Developmental Milestone</h4>
+        
+                            <p class="description">
+                                {{event.children.first_name}} {{developmental.description}}.
+                            </p>
+                            {% if developmental.picture %}
+                                <img src="{{ url_for('static', filename='event_pics/' + food.picture) }}" alt="Developmental">
+                            {% endif %}
+    
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
+                        </a>
                     </div>
-                </div>
             {% endfor %}
         {% endif %}
         {% if event.incidents %}
             {% for incident in event.incidents %}
-                <div class="log">
-                    <div class="profile_picture">
-                            <img src="{{ url_for('static', filename='profile_pics/' + event.children.picture) }}" alt="Child Picture">
-                    </div>
+                
                     <div class="incident">
-                        <h4>{{ incident.incident_type | capitalize }}</h4>
-    
-                        <p class="description">
-                            {{incident.description}}
-                        </p>
+                        <a href="{{ url_for('events.post', event_id=incident.event_id) }}">
 
-                        <p class="timestamp">
-                            {{ event.event_time|format_date }}
-                        </p>
+                            <h4>{{ incident.incident_type | capitalize }}</h4>
+        
+                            <p class="description">
+                                {{incident.description}}
+                            </p>
+    
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
+                        </a>
                     </div>
-                </div>
             {% endfor %}
         {% endif %}
         {% if event.medications %}
             {% for medication in event.medications %}
-                <div class="log">
-                    <div class="profile_picture">
-                            <img src="{{ url_for('static', filename='profile_pics/' + event.children.picture) }}" alt="Child Picture">
-                    </div>
                     <div class="medication">
-                        <h4>Medication</h4>
-    
-                        <p class="description">
-                            {{ event.children.first_name }} was given {{ medication.amount }} of {{ medication.medication_name }} at {{ medication.time_given }}
-                            {% if medication.reason %}
-                                due to {{ medication.reason }}
-                            {% endif %}
-                        </p>
+                        <a href="{{ url_for('events.post', event_id=medication.event_id) }}">
 
-                        <p class="timestamp">
-                            {{ event.event_time|format_date }}
-                        </p>
+                            <h4>Medication</h4>
+    
+                            <p class="description">
+                                {{ event.children.first_name }} was given {{ medication.amount }} of {{ medication.medication_name }} at {{ medication.time_given }}
+                                {% if medication.reason %}
+                                    due to {{ medication.reason }}
+                                {% endif %}
+                            </p>
+    
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
+                        </a>
                     </div>
-                </div>
             {% endfor %}
         {% endif %}
         {% if event.nappies %}
             {% for nappy in event.nappies %}
-                <div class="log">
-                    <div class="profile_picture">
-                            <img src="{{ url_for('static', filename='profile_pics/' + event.children.picture) }}" alt="Child Picture">
-                    </div>
+                
                     <div class="nappy">
-                        <h4>{{ nappy.nappy_type | capitalize }}</h4>
-    
-                        <p class="description">
-                            {% if nappy.nappy_type == "nappy" %}
-                                {{ event.children.first_name }} had a nappy change.
-                            {% elif nappy.nappy_type == "potty" %}
-                                {{ event.children.first_name }} used the potty.
-                            {% endif %}
-                        </p>
-                        <br>
-                        <p>
-                            {% if nappy.condition %}
-                                Additional info: {{ nappy.condition }}
-                            {% endif %}
-                        </p>
+                        <a href="{{ url_for('events.post', event_id=nappy.event_id) }}">
 
-                        <p class="timestamp">
-                            {{ event.event_time|format_date }}
-                        </p>
+                            <h4>{{ nappy.nappy_type | capitalize }}</h4>
+        
+                            <p class="description">
+                                {% if nappy.nappy_type == "nappy" %}
+                                    {{ event.children.first_name }} had a nappy change.
+                                {% elif nappy.nappy_type == "potty" %}
+                                    {{ event.children.first_name }} used the potty.
+                                {% endif %}
+                            </p>
+                            <br>
+                            <p>
+                                {% if nappy.condition %}
+                                    Additional info: {{ nappy.condition }}
+                                {% endif %}
+                            </p>
+    
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
+                        </a>
                     </div>
-                </div>
             {% endfor %}
         {% endif %}
         {% if event.notes %}
             {% for note in event.notes %}
-                <div class="log">
-                    <div class="profile_picture">
-                            <img src="{{ url_for('static', filename='profile_pics/' + event.children.picture) }}" alt="Child Picture">
-                    </div>
                     <div class="note">
-                        <h4>Note</h4>
-    
-                        <p class="description">
-                            {{  note.description }}
-                        </p>
+                        <a href="{{ url_for('events.post', event_id=note.event_id) }}">
 
-                        <p class="timestamp">
-                            {{ event.event_time|format_date }}
-                        </p>
+                            <h4>Note</h4>
+        
+                            <p class="description">
+                                {{  note.description }}
+                            </p>
+    
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
+                        </a>
                     </div>
-                </div>
-            {% endfor %}
-        {% endif %}
+                {% endfor %}
+            {% endif %}
+        {% if event.pictures %}
+            {% for picture in event.pictures %}
+                    <div class="picture">
+                        <a href="{{ url_for('events.post', event_id=picture.event_id) }}">
+
+                            <h4>Picture</h4>
+        
+                            <p class="description">
+                                {{  picture.caption }}
+                            </p>
+                            <img src="{{ url_for('static', filename='event_pics/' + picture.picture_file) }}" alt="Picture">
+    
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
+                        </a>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
     {% endfor %}
     {% if events.pages > 1 %}
         <div class="pagination">
@@ -219,6 +231,7 @@
 <h2><a href="{{ url_for('events.medication') }}">Medication</a></h2>
 <h2><a href="{{ url_for('events.nappy') }}">Nappy</a></h2>
 <h2><a href="{{ url_for('events.note') }}">Note</a></h2>
+<h2><a href="{{ url_for('events.picture') }}">Picture</a></h2>
 <h2><a href="{{ url_for('events.sleep') }}">Sleep</a></h2>
 
 {% else %}

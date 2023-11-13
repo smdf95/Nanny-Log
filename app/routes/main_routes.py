@@ -1,14 +1,54 @@
 import os
 import secrets
+from datetime import date
 from PIL import Image
-from flask import render_template, request, redirect, url_for, flash, Blueprint
+from functools import wraps
+from flask import render_template, request, redirect, url_for, flash, Blueprint, abort
 from app import app, db, bcrypt, login_manager
 from app.forms import LoginForm, RegistrationForm, ChildForm, AssignChild, UpdateProfileForm
-from app.models import User, Nanny, Parent, Manager, Parent, Child, Event
+from app.models import User, Nanny, Parent, Manager, Parent, Child, Event, Activity, Food, Incident, Developmental, Nappy, Note, Sleep, Medication
 from flask_login import login_user, current_user, logout_user, login_required
 
 main_blueprint = Blueprint('main', __name__)
 
+from functools import wraps
+from flask import abort
+from flask_login import current_user
+
+def manager_required(func):
+    @wraps(func)
+    def decorated_function(*args, **kwargs):
+        if current_user.role != 'manager':
+            abort(403)  # Forbidden
+        return func(*args, **kwargs)
+    return decorated_function
+
+
+def association_required(func):
+    @wraps(func)
+    def decorated_function(child_id, *args, **kwargs):
+        current_id = current_user.user_id
+        child = Child.query.filter_by(child_id=child_id).first()
+
+        if current_user.role == 'manager':
+            manager = Manager.query.filter_by(user_id=current_id).first()
+            if manager is None or manager.children is None or child not in manager.children:
+                abort(403)  # Forbidden
+        elif current_user.role == 'nanny':
+            nanny = Nanny.query.filter_by(user_id=current_id).first()
+            if nanny is None or nanny.children is None or child not in nanny.children:
+                abort(403)  # Forbidden
+        elif current_user.role == 'parent':
+            parent = Parent.query.filter_by(user_id=current_id).first()
+            if parent is None or parent.children is None or child not in parent.children:
+                abort(403)  # Forbidden
+        else:
+            # Handle unrecognized role (you may customize this part)
+            abort(403)  # Forbidden
+
+        return func(child_id, *args, **kwargs)
+
+    return decorated_function
 
 
 def save_profile_picture(form_picture):
@@ -111,7 +151,7 @@ def register():
 
 
         flash("Your account has been created successfully. Please log in.")
-        return redirect(url_for('login'))
+        return redirect(url_for('main.login'))
     return render_template('register.html', title='Register', form=form)
 
 @main_blueprint.route('/assign_child', methods=['GET', 'POST'])
@@ -230,11 +270,122 @@ def view_profiles():
     manager = Manager.query.filter_by(user_id=current_id).first()
     return render_template('view_profiles.html', title='View Profiles', manager=manager)
 
+def calculateAge(birthDate): 
+    today = date.today()
+    age_years = today.year - birthDate.year - ((today.month, today.day) <  (birthDate.month, birthDate.day)) 
+    age_months = today.month - birthDate.month
+    if age_years > 0:
+        if age_months < 0:
+            age_years -=1
+            age_months += 12
+    elif age_years == 0:
+        if age_months < 0:
+            age_months += 12
+    if age_years == 1:
+        if age_months == 1:
+            return str(age_years) + " year " + str(age_months) + " month"
+        else:
+            return str(age_years) + " year " + str(age_months) + " months"
+    else:
+        if age_months == 1:
+            return str(age_years) + " years " + str(age_months) + " month"
+        else:
+            return str(age_years) + " years " + str(age_months) + " months"
+   
+
 @main_blueprint.route('/child_profile/<int:child_id>')
+@login_required
+@association_required
 def child_profile(child_id):
     page = request.args.get('page', 1, type=int)
     kid = Child.query.get_or_404(child_id)
+    age = calculateAge(kid.dob)
     events = Event.query.filter_by(child_id=kid.child_id)\
                     .order_by(Event.event_time.desc())\
                     .paginate(page=page, per_page=10)
-    return render_template('child_profile.html', title=kid.first_name, events=events, child=kid)
+    return render_template('child_profile.html', title=kid.first_name, events=events, child=kid, age=age)
+
+@main_blueprint.route('/remove_parent_association/<int:child_id>/<int:parent_id>')
+@login_required
+@manager_required
+def remove_parent_association(child_id, parent_id):
+    child = Child.query.get_or_404(child_id)
+    parent = Parent.query.get_or_404(parent_id)
+    child.parents.remove(parent)
+    db.session.commit()
+    flash('Parent removed from child')
+    return redirect(url_for('main.child_profile', child_id=child_id))
+
+@main_blueprint.route('/remove_nanny_association/<int:child_id>/<int:nanny_id>')
+@login_required
+@manager_required
+def remove_nanny_association(child_id, nanny_id):
+    child = Child.query.get_or_404(child_id)
+    nanny = Nanny.query.get_or_404(nanny_id)
+    child.nannies.remove(nanny)
+    db.session.commit()
+    flash('Nanny removed from child')
+    return redirect(url_for('main.child_profile', child_id=child_id))
+
+@main_blueprint.route('/remove_child/<int:child_id>')
+@login_required
+@manager_required
+def remove_child(child_id):
+    events = Event.query.filter_by(child_id=child_id).all()
+    for event in events:
+        activities = Activity.query.filter_by(event_id=event.event_id).all()
+        developmentals = Developmental.query.filter_by(event_id=event.event_id).all()
+        foods = Food.query.filter_by(event_id=event.event_id).all()
+        incidents = Incident.query.filter_by(event_id=event.event_id).all()
+        medications = Medication.query.filter_by(event_id=event.event_id).all()
+        nappies = Nappy.query.filter_by(event_id=event.event_id).all()
+        notes = Note.query.filter_by(event_id=event.event_id).all()
+        sleeps = Sleep.query.filter_by(event_id=event.event_id).all()
+        if activities:
+            Activity.query.filter_by(event_id=event.event_id).delete()
+        if developmentals:
+            Developmental.query.filter_by(event_id=event.event_id).delete()
+        if foods:
+            Food.query.filter_by(event_id=event.event_id).delete()
+        if incidents:
+            Incident.query.filter_by(event_id=event.event_id).delete()
+        if medications:
+            Medication.query.filter_by(event_id=event.event_id).delete()
+        if nappies:
+            Nappy.query.filter_by(event_id=event.event_id).delete()
+        if notes:
+            Note.query.filter_by(event_id=event.event_id).delete()
+        if sleeps:
+            Sleep.query.filter_by(event_id=event.event_id).delete()
+        
+        Event.query.filter_by(event_id=event.event_id).delete()
+    
+    Child.query.filter_by(child_id=child_id).delete()
+    
+    db.session.commit()
+    flash('Child removed from database')
+    return redirect(url_for('index'))
+
+@main_blueprint.route('/remove_user/<int:user_id>')
+@login_required
+@manager_required
+def remove_user(user_id):
+    user = User.query.filter_by(user_id=user_id).first()
+    if user.role == 'nanny':
+        Nanny.query.filter_by(user_id=user_id).delete()
+    elif user.role == 'parent':
+        Parent.query.filter_by(user_id=user_id).delete()
+    
+    User.query.filter_by(user_id=user_id).delete()
+    
+    db.session.commit()
+    flash('User removed from database')
+    return redirect(url_for('index'))
+
+@main_blueprint.route('/others_profile/<int:user_id>')
+@login_required
+def others_profile(user_id):
+    user = User.query.get_or_404(user_id)
+    nanny = Nanny.query.filter_by(user_id=user_id).first()
+    parent = Parent.query.filter_by(user_id=user_id).first()
+    return render_template('others_profile.html', user=user, nanny=nanny, parent=parent)
