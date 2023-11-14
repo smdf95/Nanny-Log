@@ -145,16 +145,43 @@
         </div>
     {% endfor %}
 {% endif %}
+{% if event.pictures %}
+{% for picture in event.pictures %}
+        <div class="picture">
+                <h4>Picture</h4>
+
+                <p class="description">
+                    {{  picture.caption }}
+                </p>
+                <img src="{{ url_for('static', filename='event_pics/' + picture.picture_file) }}" alt="Picture">
+
+                <p class="timestamp">
+                    {{ event.event_time|format_date }}
+                </p>
+        </div>
+    {% endfor %}
+{% endif %}
 </div>
 <div class="comments">
     {% if comments %}
         <h2>Comments</h2>
         {% for comment in comments %}
             <div class="comment">
-                {{ comment.comment_text }}
-                {{ comment.comment_time|format_date}}
                 {% set user = User.query.get(comment.user_id) %}
-                {{ user.first_name }} {{ user.last_name }}
+                <div class="comment_profile_picture">
+                    <img src="{{ url_for('static', filename='profile_pics/' + user.picture) }}" alt="Profile Picture">
+                </div>
+                <div class="comment_container">
+                    <div class="commenter">
+                        {{ user.first_name }} {{ user.last_name }} - {{ comment.comment_time|format_date}}
+                    </div>
+                    <div class="text">
+                        {{ comment.comment_text }}
+                    </div>
+                    {% if user.user_id == current_user.user_id %}
+                        <a href="{{ url_for('events.delete_comment', comment_id=comment.comment_id) }}">Delete</a>
+                    {% endif %}
+                </div>
             </div>
         {% endfor %}
     {% endif %}
@@ -167,7 +194,7 @@
         {{ form.hidden_tag() }}
         {{ form.comment_text }}
         {{ form.submit() }}
-        
+
     </form>
 </div>
 

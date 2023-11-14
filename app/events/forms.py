@@ -1,66 +1,11 @@
 from flask_wtf import FlaskForm
-from wtforms import Form, StringField, PasswordField, BooleanField, RadioField, SubmitField, SelectField, ValidationError, IntegerField, DateTimeField, DateField, SelectMultipleField, widgets
-from wtforms.validators import DataRequired, Email, EqualTo, Length
+from wtforms import StringField, SubmitField, SelectField, ValidationError, IntegerField, SelectMultipleField, widgets
+from wtforms.validators import DataRequired, Length
 from flask_wtf.file import FileField, FileAllowed
-from app.models import User
-from flask_login import current_user
 
 def validate_not_none(form, field):
     if field.data is None:
         raise ValidationError('Please select a role.')
-
-
-class LoginForm(FlaskForm):
-    """
-    Login form
-    """
-    email = StringField('Email', validators=[DataRequired()])
-    password = PasswordField('Password', validators=[DataRequired()])
-    remember = BooleanField('Remember me')
-    submit = SubmitField('Login')
-
-class RegistrationForm(FlaskForm):
-    """
-    Registration form
-    """
-    email = StringField('Email', validators=[DataRequired(), Email()])
-    first_name = StringField('First Name', validators=[DataRequired()])
-    last_name = StringField('Last Name', validators=[DataRequired()])
-    role = SelectField('Role', choices=[(None, 'Select Role'),('manager', 'Manager'), ('nanny', 'Nanny'), ('parent', 'Parent')], default=None, validators=[validate_not_none])
-    password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
-    password2 = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
-
-class ChildForm(FlaskForm):
-    """
-    Child form
-    """
-    first_name = StringField('First Name', validators=[DataRequired()])
-    last_name = StringField('Last Name', validators=[DataRequired()])
-    dob = DateField('Date of Birth', validators=[DataRequired()])
-    picture = FileField('Upload Picture', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
-    gender = SelectField('Gender', choices=[(None, 'Select Gender'), ('m', 'Male'), ('f', 'Female'), ('nb', 'Non-Binary'), ('na', 'Prefer not to Say')], default=None, validators=[validate_not_none])
-    submit = SubmitField('Submit')
-
-class UpdateProfileForm(FlaskForm):
-    """
-    Update Profile form
-    """
-    first_name = StringField('First Name')
-    last_name = StringField('Last Name')
-    email = StringField('Email', validators=[Email()])
-    picture = FileField('Upload Picture', validators=[FileAllowed(['jpg', 'png', 'jpeg'])])
-    submit = SubmitField('Update')
-
-    def validate_email(self, email):
-        """
-        Validate email
-        """
-        if email.data != current_user.email:
-            user = User.query.filter_by(email=email.data).first()
-            if user:
-                raise ValidationError('That email is already in use. Please choose a different email address.')
-    
-   
 
 class ActivitiesForm(FlaskForm):
     """
@@ -147,19 +92,9 @@ class SleepForm(FlaskForm):
     sleep_end = StringField('Sleep End', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
-class AssignChild(FlaskForm):
-    """
-    Form for assigning children to parents and nannies
-    """
-    child = SelectField('Select Child')
-    parent = SelectField('Select Parent')
-    nanny = SelectField('Select Nanny')
-    submit = SubmitField('Submit')
-
 class CommentForm(FlaskForm):
     """
     Comment form
     """
     comment_text = StringField('Comment Text', validators=[DataRequired(), Length(min=1, max=255)])
     submit = SubmitField('Submit')
-

@@ -1,24 +1,35 @@
+import os
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 from datetime import datetime, timedelta
-from flask_login import login_user, current_user, logout_user, login_required
+from flask_login import current_user
+from flask_mail import Mail
 
 
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecret'
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+# postgres://nanny_log_app_user:WlmdatEaM6COS0RmoNrKouZJJ7HrgDZ4@dpg-cl94culb7ptc73ddsp8g-a.frankfurt-postgres.render.com/nanny_log_app
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = os.environ.get('DB_EMAIL')
+app.config['MAIL_PASSWORD'] = os.environ.get('DB_PASS')
+mail = Mail(app)
 
-from app.models import User, Nanny, Parent, Manager, Parent, Activity, Event, Sleep, Child, Food, Developmental, Incident, Medication, Nappy, Note
-from .routes.event_routes import events_blueprint
-from .routes.main_routes import main_blueprint
+from app.models import Nanny, Parent, Manager, Parent, Event
+from .events.routes import events_blueprint
+from .children.routes import children_blueprint
+from .users.routes import users_blueprint
 app.register_blueprint(events_blueprint)
-app.register_blueprint(main_blueprint)
+app.register_blueprint(children_blueprint)
+app.register_blueprint(users_blueprint)
 
 @app.template_filter('format_date')
 def format_date(event_time):

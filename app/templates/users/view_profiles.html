@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <h1>Children</h1>
+        {% for child in manager.children %}
+            <div class="profile">
+                <div class="profile_picture">
+                    <a href="{{ url_for('children.child_profile', child_id=child.child_id) }}">
+                    <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="{{ child.first_name }}" width="100" height="100">
+                    </a>
+                </div>
+                <div class="profile_info">
+                    
+                    <h4><a href="{{ url_for('children.child_profile', child_id=child.child_id) }}">{{ child.first_name }} {{ child.last_name }}</a></h4>
+                </div>
+            </div>
+        {% endfor %}
+        <h1>Parents</h1>
+        {% for parent in manager.parents %}
+            <div class="profile">
+                <div class="profile_picture">
+                    <a href="{{ url_for('users.others_profile', user_id=parent.user_id)}}">
+                    <img src="{{ url_for('static', filename='profile_pics/' + parent.user.picture) }}" alt="Child Picture">
+                    </a>
+                </div>
+                <div class="profile_info">
+                    <h4><a href="{{ url_for('users.others_profile', user_id=parent.user_id)}}">{{ parent.user.first_name }} {{ parent.user.last_name }}</a></h4>
+                </div>
+            </div>
+        {% endfor %}
+        <h1>Nannies</h1>
+        {% for nanny in manager.nannies %}
+            <div class="profile">
+                <div class="profile_picture">
+                    <a href="{{ url_for('users.others_profile', user_id=nanny.user_id)}}">
+                    <img src="{{ url_for('static', filename='profile_pics/' + nanny.user.picture) }}" alt="Child Picture">
+                    </a>
+                </div>
+                <div class="profile_info">
+                    <h4><a href="{{ url_for('users.others_profile', user_id=nanny.user_id)}}">{{ nanny.user.first_name }} {{ nanny.user.last_name }}</a></h4>
+                </div>
+            </div>
+        {% endfor %}
+{% endblock %}

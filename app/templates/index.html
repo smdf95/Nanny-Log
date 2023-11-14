@@ -8,7 +8,7 @@
 <div class="feed">
     {% for event in events.items %}
     <div class="log">
-        <a href="{{ url_for('main.child_profile', child_id=event.children.child_id )}}">
+        <a href="{{ url_for('children.child_profile', child_id=event.children.child_id )}}">
         <div class="profile_picture">
             <img src="{{ url_for('static', filename='profile_pics/' + event.children.picture) }}" alt="Child Picture">
         </div>

@@ -35,9 +35,9 @@
                             <li><a href="{{ url_for('index') }}">My Kids</a></li>
                         {% endif %}
                         {% if current_user.role == 'manager' %}
-                            <li><a href="{{ url_for('main.assign_child') }}">Assign Child</a></li>
-                            <li><a href="{{ url_for('main.add_child') }}">Add Child</a></li>
-                            <li><a href="{{ url_for('main.view_profiles') }}">View Profiles</a></li>
+                            <li><a href="{{ url_for('children.assign_child') }}">Assign Child</a></li>
+                            <li><a href="{{ url_for('children.add_child') }}">Add Child</a></li>
+                            <li><a href="{{ url_for('users.view_profiles') }}">View Profiles</a></li>
                         {% endif %}
                     {% endif %}
                 </ul>
@@ -46,13 +46,13 @@
                 <ul>
                     {% if current_user.is_authenticated %}
 
-                        <li><a href="{{ url_for('main.profile') }}">Profile</a></li>
-                        <li><a href="{{ url_for('main.logout') }}">Logout</a></li>
+                        <li><a href="{{ url_for('users.profile') }}">Profile</a></li>
+                        <li><a href="{{ url_for('users.logout') }}">Logout</a></li>
 
                     {% else%}
 
-                        <li><a href="{{ url_for('main.login') }}">Login</a></li>
-                        <li><a href="{{ url_for('main.register') }}">Register</a></li>
+                        <li><a href="{{ url_for('users.login') }}">Login</a></li>
+                        <li><a href="{{ url_for('users.register') }}">Register</a></li>
 
                     {% endif %}
                 </ul>

@@ -29,7 +29,10 @@
 
 
 TODO:
-Add forgot password route
-Add change password to profile
+[Done]Add forgot password route
+[Done]Add change password to profile
 [Done]Add comments to posts
 [Done]Add picture table
+Add "Are you sure?" Message when deleting profiles
+Add ability to delete events
+Add change pic for children too

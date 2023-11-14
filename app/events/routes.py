@@ -1,60 +1,12 @@
-import os
-import secrets
-from PIL import Image
 from datetime import datetime
-from functools import wraps
-from flask import render_template, redirect, url_for, flash, Blueprint, request, abort
-from app import app, db
-from app.forms import ActivitiesForm, SleepForm, FoodForm, DevelopmentalForm, IncidentForm, MedicationForm, NappyForm, NoteForm, CommentForm, PictureForm
-from app.models import Nanny, Manager, Parent, User, Child, Activity, Event, Sleep, Food, Developmental, Incident, Medication, Nappy, Note, Comment, Picture
+from flask import render_template, redirect, url_for, flash, Blueprint, request
+from app import db
+from app.events.forms import ActivitiesForm, SleepForm, FoodForm, DevelopmentalForm, IncidentForm, MedicationForm, NappyForm, NoteForm, CommentForm, PictureForm
+from app.events.utils import save_event_picture, get_assigned_children
+from app.models import Nanny, Manager, User, Activity, Event, Sleep, Food, Developmental, Incident, Medication, Nappy, Note, Comment, Picture
 from flask_login import current_user, login_required
 
 events_blueprint = Blueprint('events', __name__)
-
-def association_required(func):
-    @wraps(func)
-    def decorated_function(child_id, *args, **kwargs):
-        current_id = current_user.user_id
-        child = Child.query.filter_by(child_id=child_id).first()
-
-        if current_user.role == 'manager':
-            manager = Manager.query.filter_by(user_id=current_id).first()
-            if manager is None or manager.children is None or child not in manager.children:
-                abort(403)  # Forbidden
-        elif current_user.role == 'nanny':
-            nanny = Nanny.query.filter_by(user_id=current_id).first()
-            if nanny is None or nanny.children is None or child not in nanny.children:
-                abort(403)  # Forbidden
-        elif current_user.role == 'parent':
-            parent = Parent.query.filter_by(user_id=current_id).first()
-            if parent is None or parent.children is None or child not in parent.children:
-                abort(403)  # Forbidden
-        else:
-            # Handle unrecognized role (you may customize this part)
-            abort(403)  # Forbidden
-
-        return func(child_id, *args, **kwargs)
-
-    return decorated_function
-
-def save_event_picture(form_picture):
-    random_hex = secrets.token_hex(8)
-    _, f_ext = os.path.splitext(form_picture.filename)
-    picture_fn = random_hex + f_ext
-    picture_path = os.path.join(app.root_path, 'static/event_pics', picture_fn)
-
-    output_size = (125, 125)
-    i = Image.open(form_picture)
-    i.thumbnail(output_size)
-
-    i.save(picture_path)
-    return picture_fn
-
-def get_assigned_children(user, child_ids):
-    if not isinstance(child_ids, list):
-        child_ids = [child_ids]  # Transform the single ID into a list
-
-    return Child.query.filter(Child.child_id.in_(child_ids)).all()
 
 
 @events_blueprint.route('/activities', methods=['GET', 'POST'])
@@ -512,3 +464,27 @@ def post(event_id):
         db.session.commit()
         return redirect(url_for('events.post', event_id=event_id))
     return render_template('events/post.html', title='Post', event=event, comments=comments, form=form, User=User)
+
+@events_blueprint.route('/delete_comment/<int:comment_id>', methods=['GET', 'POST'])
+@login_required
+def delete_comment(comment_id):
+    comment = Comment.query.get(comment_id)
+    if comment.user_id == current_user.user_id:
+        db.session.delete(comment)
+        db.session.commit()
+        flash('Comment successfully deleted!')
+    else:
+        flash('You can only delete your own comments!')
+    return redirect(url_for('events.post', event_id=comment.event_id))
+
+
+
+@events_blueprint.route('/delete_event/<int:event_id>', methods=['GET', 'POST'])
+@login_required
+def delete_event(event_id):
+    event = Event.query.get(event_id)
+    if event.user_id == current_user.user_id or current_user.role == 'manager':
+        db.session.delete(event)
+        db.session.commit()
+    return redirect(url_for('events.index'))
+

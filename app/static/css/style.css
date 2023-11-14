@@ -218,7 +218,7 @@ input:focus {
     text-align: center;
 }
 
-.activity, .sleep, .food, .developmental, .incident, .medication, .nappy, .note {
+.activity, .sleep, .food, .developmental, .incident, .medication, .nappy, .note, .picture {
     border-radius: 50px;
     margin: 20px;
     padding: 20px;
@@ -256,18 +256,93 @@ input:focus {
     padding: 20px 10px 10px;
 }
 
-.profile_picture {
-    justify-self: flex-start;
-    width: 30%;
+.profile {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 }
 
-.profile_picture img {
-    width: 100px;
-    height: 100px;
+.profile_picture {
+    width: 140px; /* Set a fixed width for the container */
+    height: 140px; /* Set a fixed height for the container */
+    overflow: hidden; /* Ensure the circular shape is maintained */
     border-radius: 50%;
     margin: 20px;
+    position: relative; /* Positioning context for absolute positioning of the image */
+}
+
+.profile_picture img, .comment_profile_picture img {
+    width: 100%; /* Use 100% width to fill the container */
+    height: auto;
+    display: block; /* Eliminate any spacing issues */
+    object-fit: cover; /* Ensure the image covers the entire container */
+    object-position: center center; /* Center the image within the container */
+    position: absolute; /* Position the image absolutely within its container */
+    top: 50%; /* Move the top of the image down to the center */
+    left: 50%; /* Move the left of the image to the center */
+    transform: translate(-50%, -50%); /* Center the image using transform */
+}
+
+.comment_profile_picture {
+    width: 100px; /* Set a fixed width for the container */
+    height: 100px; /* Set a fixed height for the container */
+    overflow: hidden; /* Ensure the circular shape is maintained */
+    border-radius: 50%;
+    margin: 20px 50px;
+    position: relative; /* Positioning context for absolute positioning of the image */
 }
 
 .active_page {
     font-weight: 600;
+}
+
+.comment {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.text {
+    font-size: 18px;
+}
+
+.commenter {
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.text {
+    flex: 1;
+}
+
+
+@media screen and (max-width: 768px){
+    
+    main {
+        padding: 0 0;
+    }
+
+    .feed {
+        flex-direction: column;
+        width: 80%;
+        margin: 0 10%;
+    }
+
+    .log {
+        width: 100%;
+        margin: 20px 0;
+        padding: 0;
+    }
+
+    .log p {
+        text-align: center;
+        padding: 0;
+    }
+
+    .activity, .sleep, .food, .developmental, .incident, .medication, .nappy, .note, .picture {
+        border-radius: 50px;
+        padding: 20px;
+        margin: 0 10%;
+        width: 80%;
+    }
 }
