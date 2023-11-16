@@ -11,8 +11,8 @@ from flask_mail import Mail
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecret'
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-# postgres://nanny_log_app_user:WlmdatEaM6COS0RmoNrKouZJJ7HrgDZ4@dpg-cl94culb7ptc73ddsp8g-a.frankfurt-postgres.render.com/nanny_log_app
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
@@ -73,6 +73,7 @@ def index():
                 child_ids = [child.child_id for child in parent.children]
 
         page = request.args.get('page', 1, type=int)
+        
         
         events = Event.query.filter(Event.child_id.in_(child_ids))\
                     .order_by(Event.event_time.desc())\

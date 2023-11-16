@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, ValidationError, IntegerField, SelectMultipleField, widgets
+from wtforms import StringField, SubmitField, SelectField, ValidationError, IntegerField, SelectMultipleField, widgets, TextAreaField
 from wtforms.validators import DataRequired, Length
 from flask_wtf.file import FileField, FileAllowed
 
@@ -13,7 +13,7 @@ class ActivitiesForm(FlaskForm):
     """
     child = SelectMultipleField('Select Children', coerce=int, widget=widgets.ListWidget(prefix_label=False), option_widget=widgets.CheckboxInput())
     duration = IntegerField('Duration in Minutes', validators=[DataRequired()])
-    description = StringField('Description', validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[DataRequired()])
     picture = FileField('Upload Picture', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Submit')
 
@@ -23,7 +23,7 @@ class DevelopmentalForm(FlaskForm):
     Developmental form
     """
     child = SelectMultipleField('Select Children', coerce=int, widget=widgets.ListWidget(prefix_label=False), option_widget=widgets.CheckboxInput())
-    description = StringField('Description', validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[DataRequired()])
     picture = FileField('Upload Picture', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Submit')
 
@@ -33,7 +33,7 @@ class FoodForm(FlaskForm):
     """
     child = SelectMultipleField('Select Children', coerce=int, widget=widgets.ListWidget(prefix_label=False), option_widget=widgets.CheckboxInput())
     meal_type = SelectField('Meal Type', choices=[(None, 'Select Meal Type'), ('bottle', 'Bottle'), ('breakfast', 'Breakfast'), ('lunch', 'Lunch'), ('dinner', 'Dinner')], default=None, validators=[validate_not_none])
-    description = StringField('Description', validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[DataRequired()])
     picture = FileField('Upload Picture', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Submit')
 
@@ -43,7 +43,7 @@ class IncidentForm(FlaskForm):
     """
     child = SelectMultipleField('Select Children', coerce=int, widget=widgets.ListWidget(prefix_label=False), option_widget=widgets.CheckboxInput())
     incident_type = SelectField('Incident Type', choices=[(None, 'Select Incident Type'), ('injury', 'Injury'), ('health', 'Health'), ('behavioural', 'Behavioural'), ('other', 'Other')], default=None, validators=[validate_not_none])
-    description = StringField('Description', validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 class MedicationForm(FlaskForm):
@@ -53,7 +53,7 @@ class MedicationForm(FlaskForm):
     child = SelectMultipleField('Select Children', coerce=int, widget=widgets.ListWidget(prefix_label=False), option_widget=widgets.CheckboxInput())
     medication_name = StringField('Medication Name', validators=[DataRequired()])
     amount = StringField('Amount', validators=[DataRequired()])
-    reason = StringField('Reason')
+    reason = TextAreaField('Reason')
     time_given = StringField('Time Given', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
@@ -63,7 +63,7 @@ class NappyForm(FlaskForm):
     """
     child = SelectMultipleField('Select Children', coerce=int, widget=widgets.ListWidget(prefix_label=False), option_widget=widgets.CheckboxInput())
     nappy_type = SelectField('Nappy Type', choices=[(None, 'Choose Nappy or Potty'), ('nappy', 'Nappy'), ('potty', 'Potty')], default=None, validators=[validate_not_none])
-    condition = StringField('Condition')
+    condition = TextAreaField('Condition')
     submit = SubmitField('Submit')
 
 class NoteForm(FlaskForm):
@@ -71,7 +71,7 @@ class NoteForm(FlaskForm):
     Note form
     """
     child = SelectMultipleField('Select Children', coerce=int, widget=widgets.ListWidget(prefix_label=False), option_widget=widgets.CheckboxInput())
-    description = StringField('Description', validators=[DataRequired()])
+    description = TextAreaField('Description', validators=[DataRequired()])
     submit = SubmitField('Submit')
 
 class PictureForm(FlaskForm):
@@ -96,5 +96,5 @@ class CommentForm(FlaskForm):
     """
     Comment form
     """
-    comment_text = StringField('Comment Text', validators=[DataRequired(), Length(min=1, max=255)])
+    comment_text = TextAreaField('Comment Text', validators=[DataRequired(), Length(min=1, max=255)])
     submit = SubmitField('Submit')

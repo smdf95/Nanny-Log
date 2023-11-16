@@ -57,7 +57,7 @@ def send_reset_email(user):
     token = user.get_reset_token()
     msg = Message('Password Reset Request', sender='noreply@demo.com', recipients=[user.email])
     msg.body = f'''To initiate the password reset process, please click on the link below:
-{url_for('main.reset_password', token=token, _external=True)}
+{url_for('users.reset_password', token=token, _external=True)}
 If you haven't requested this password reset, you can disregard this email, and no changes will be made to your account.'''
 
     mail.send(msg)

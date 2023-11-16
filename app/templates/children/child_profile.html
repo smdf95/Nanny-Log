@@ -54,40 +54,60 @@
         {% for event in events.items %}
             <div class="log">
                 {% if event.activities %}
-                {% for activity in event.activities %}
-                        <div class="activity">
-                            <a href="{{ url_for('events.post', event_id=activity.event_id) }}">
-                                <h4>Activity</h4>
+            {% for activity in event.activities %}
+                    <div class="activity">
+                        <a href="{{ url_for('events.post', event_id=activity.event_id) }}">
+
+                            <div class="event_title_container">
+                                <div class="event_title">
+                                    <h4>Activity</h4>
+                                </div>
+                            </div>
+                            <div class="event_info">
                                 <p class="description">
                                     {{ event.children.first_name }} {{ activity.description }} for {{ activity.duration }} minutes.
                                 </p>
-                                <p class="timestamp">
-                                    {{ event.event_time|format_date }}
-                                </p>
-                            </a>
-                        </div>
-                {% endfor %}
-            {% endif %}
-            {% if event.sleeps %}
-                {% for sleep in event.sleeps %}
-                        <div class="sleep">
-                            <a href="{{ url_for('events.post', event_id=sleep.event_id) }}">
-                                <h4>Sleep</h4>
+                            </div>
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
+                        </a>
+                    </div>
+            {% endfor %}
+        {% endif %}
+        {% if event.sleeps %}
+            {% for sleep in event.sleeps %}
+                    <div class="sleep">
+                        <a href="{{ url_for('events.post', event_id=sleep.event_id) }}">
+
+                            <div class="event_title_container">
+                                <div class="event_title">
+                                    <h4>Sleep</h4>
+                                </div>
+                            </div>
+                            <div class="event_info">
                                 <p class="description">
                                     {{event.children.first_name}} went to sleep at {{ sleep.sleep_start }} and woke up at {{ sleep.sleep_end }}.
                                 </p>
-                                <p class="timestamp">
-                                    {{ event.event_time|format_date }}
-                                </p>
-                            </a>
-                        </div>
-                {% endfor %}
-            {% endif %}
-            {% if event.foods %}
-                {% for food in event.foods %}
-                        <div class="food">
-                            <a href="{{ url_for('events.post', event_id=food.event_id) }}">
-                                <h4>{{ food.meal_type | capitalize }}</h4>
+                            </div>
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
+                        </a>
+                    </div>
+            {% endfor %}
+        {% endif %}
+        {% if event.foods %}
+            {% for food in event.foods %}
+                    <div class="food">
+                        <a href="{{ url_for('events.post', event_id=food.event_id) }}">
+
+                            <div class="event_title_container">
+                                <div class="event_title">
+                                    <h4>{{ food.meal_type | capitalize }}</h4>
+                                </div>
+                            </div>
+                            <div class="event_info">
                                 <p class="description">
                                     {% if event.children.gender == "m" %}
                                         {{event.children.first_name}} had {{ food.description }} for his {{ food.meal_type }}.
@@ -100,69 +120,99 @@
                                 {% if food.picture %}
                                     <img src="{{ url_for('static', filename='event_pics/' + food.picture) }}" alt="Food">
                                 {% endif %}
-                                <p class="timestamp">
-                                    {{ event.event_time|format_date }}
-                                </p>
-                            </a>
-                        </div>
-                {% endfor %}
-            {% endif %}
-            {% if event.developmentals %}
-                {% for developmental in event.developmentals %}
-                        <div class="developmental">
-                            <a href="{{ url_for('events.post', event_id=developmental.event_id) }}">
-                                <h4>Developmental Milestone</h4>
+                            </div>
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
+                        </a>
+                    </div>
+            {% endfor %}
+        {% endif %}
+        {% if event.developmentals %}
+            {% for developmental in event.developmentals %}
+                    <div class="developmental">
+                        <a href="{{ url_for('events.post', event_id=developmental.event_id) }}">
+
+                            <div class="event_title_container">
+                                <div class="event_title">
+                                    <h4>Developmental Milestone</h4>
+                                </div>
+                            </div>
+                            <div class="event_info">
                                 <p class="description">
                                     {{event.children.first_name}} {{developmental.description}}.
                                 </p>
                                 {% if developmental.picture %}
                                     <img src="{{ url_for('static', filename='event_pics/' + food.picture) }}" alt="Developmental">
                                 {% endif %}
-                                <p class="timestamp">
-                                    {{ event.event_time|format_date }}
-                                </p>
-                            </a>
-                        </div>
-                {% endfor %}
-            {% endif %}
-            {% if event.incidents %}
-                {% for incident in event.incidents %}
-                        <div class="incident">
-                            <a href="{{ url_for('events.post', event_id=incident.event_id) }}">
-                                <h4>{{ incident.incident_type | capitalize }}</h4>
+                            </div>
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
+                        </a>
+                    </div>
+            {% endfor %}
+        {% endif %}
+        {% if event.incidents %}
+            {% for incident in event.incidents %}
+                    <div class="incident">
+                        <a href="{{ url_for('events.post', event_id=incident.event_id) }}">
+
+                            <div class="event_title_container">
+                                <div class="event_title">
+                                    <h4>{{ incident.incident_type | capitalize }}</h4>
+                                </div>
+                            </div>
+                            <div class="event_info">
                                 <p class="description">
                                     {{incident.description}}
                                 </p>
-                                <p class="timestamp">
-                                    {{ event.event_time|format_date }}
-                                </p>
-                            </a>
-                        </div>
-                {% endfor %}
-            {% endif %}
-            {% if event.medications %}
-                {% for medication in event.medications %}
-                        <div class="medication">
-                            <a href="{{ url_for('events.post', event_id=medication.event_id) }}">
-                                <h4>Medication</h4>
+                            </div>
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
+                        </a>
+                    </div>
+            {% endfor %}
+        {% endif %}
+        {% if event.medications %}
+            {% for medication in event.medications %}
+                    <div class="medication">
+                        <a href="{{ url_for('events.post', event_id=medication.event_id) }}">
+
+                            <div class="event_title_container">
+                                <div class="event_title">
+                                    <h4>Medication</h4>
+                                </div>
+                            </div>
+                            <div class="event_info">
                                 <p class="description">
                                     {{ event.children.first_name }} was given {{ medication.amount }} of {{ medication.medication_name }} at {{ medication.time_given }}
                                     {% if medication.reason %}
                                         due to {{ medication.reason }}
                                     {% endif %}
                                 </p>
-                                <p class="timestamp">
-                                    {{ event.event_time|format_date }}
-                                </p>
-                            </a>
-                        </div>
-                {% endfor %}
-            {% endif %}
-            {% if event.nappies %}
-                {% for nappy in event.nappies %}
-                        <div class="nappy">
-                            <a href="{{ url_for('events.post', event_id=nappy.event_id) }}">
-                                <h4>{{ nappy.nappy_type | capitalize }}</h4>
+                            </div>
+
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
+                        </a>
+                    </div>
+            {% endfor %}
+        {% endif %}
+        {% if event.nappies %}
+            {% for nappy in event.nappies %}
+                    <div class="nappy">
+                        <a href="{{ url_for('events.post', event_id=nappy.event_id) }}">
+
+                            <div class="event_title_container">
+                                <div class="event_title">
+                                    <h4>{{ nappy.nappy_type | capitalize }}</h4>
+
+                                </div>
+                            </div>
+                            <div class="event_info">
                                 <p class="description">
                                     {% if nappy.nappy_type == "nappy" %}
                                         {{ event.children.first_name }} had a nappy change.
@@ -176,44 +226,59 @@
                                         Additional info: {{ nappy.condition }}
                                     {% endif %}
                                 </p>
-                                <p class="timestamp">
-                                    {{ event.event_time|format_date }}
-                                </p>
-                            </a>
-                        </div>
-                {% endfor %}
-            {% endif %}
-            {% if event.notes %}
-                {% for note in event.notes %}
-                        <div class="note">
-                            <a href="{{ url_for('events.post', event_id=note.event_id) }}">
-                                <h4>Note</h4>
+                            </div>
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
+                        </a>
+                    </div>
+            {% endfor %}
+        {% endif %}
+        {% if event.notes %}
+            {% for note in event.notes %}
+                    <div class="note">
+                        <a href="{{ url_for('events.post', event_id=note.event_id) }}">
+
+                            <div class="event_title_container">
+                                <div class="event_title">
+                                    Note
+                                </div>
+                            </div>
+                            <div class="event_info">
                                 <p class="description">
                                     {{  note.description }}
                                 </p>
-                                <p class="timestamp">
-                                    {{ event.event_time|format_date }}
-                                </p>
-                            </a>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-            {% if event.pictures %}
-                {% for picture in event.pictures %}
-                        <div class="picture">
-                            <a href="{{ url_for('events.post', event_id=picture.event_id) }}">
-                                <h4>Picture</h4>
+                            </div>
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
+                        </a>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% if event.pictures %}
+            {% for picture in event.pictures %}
+                    <div class="picture">
+                        <a href="{{ url_for('events.post', event_id=picture.event_id) }}">
+
+                            <div class="event_title_container">
+                                <div class="event_title">
+                                    <h4>Picture</h4>
+                                </div>
+                            </div>
+                            <div class="event_info">
+                                <img src="{{ url_for('static', filename='event_pics/' + picture.picture_file) }}" alt="Picture">
                                 <p class="description">
                                     {{  picture.caption }}
                                 </p>
-                                <img src="{{ url_for('static', filename='event_pics/' + picture.picture_file) }}" alt="Picture">
-                                <p class="timestamp">
-                                    {{ event.event_time|format_date }}
-                                </p>
-                            </a>
-                        </div>
-                    {% endfor %}
-                {% endif %}
+                            </div>
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
+                        </a>
+                    </div>
+                {% endfor %}
+            {% endif %}
         </div>
     </div>
 

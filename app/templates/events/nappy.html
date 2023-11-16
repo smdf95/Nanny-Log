@@ -8,17 +8,25 @@
         {{ form.hidden_tag() }}
         <ul>
             {% for choice, label in form.child.choices %}
+            {% set child = Child.query.filter_by(child_id=choice).first() %}
                 <li>
+                    <div class="form_profile_picture">
                     <label class="custom-checkbox">
                         <input type="checkbox" name="{{ form.child.name }}" value="{{ choice }}">
-                        <span class="custom-checkbox-label">{{ label }}</span>
+                        <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
                     </label>
+                </div>
+                <span class="custom-checkbox-label">{{ label }}</span>
                 </li>
             {% endfor %}
         </ul>
         {{ form.nappy_type }}
-        {{ form.condition(placeholder="Condition of Nappy/Potty if relevant") }}
+        <h3>Condition of Nappy/Potty</h3>
+        <div class="description_form">
+            {{ form.condition }}
+        </div>
         {{ form.submit() }}
+
         
     </form>
 </div>

@@ -3,7 +3,7 @@ from flask import render_template, redirect, url_for, flash, Blueprint, request
 from app import db
 from app.events.forms import ActivitiesForm, SleepForm, FoodForm, DevelopmentalForm, IncidentForm, MedicationForm, NappyForm, NoteForm, CommentForm, PictureForm
 from app.events.utils import save_event_picture, get_assigned_children
-from app.models import Nanny, Manager, User, Activity, Event, Sleep, Food, Developmental, Incident, Medication, Nappy, Note, Comment, Picture
+from app.models import Nanny, Manager, User, Child, Activity, Event, Sleep, Food, Developmental, Incident, Medication, Nappy, Note, Comment, Picture
 from flask_login import current_user, login_required
 
 events_blueprint = Blueprint('events', __name__)
@@ -59,7 +59,7 @@ def activities():
                 db.session.commit()
             return redirect(url_for('index'))
     return render_template('events/activities.html', title='Activities', 
-    form=form)
+    form=form, Child=Child)
 
 @events_blueprint.route('/developmental', methods=['GET', 'POST'])
 @login_required
@@ -111,7 +111,7 @@ def developmental():
                 db.session.commit()
                 flash('Your log has been created!', 'success')
             return redirect(url_for('index'))
-    return render_template('events/developmental.html', title='Developmental', form=form)
+    return render_template('events/developmental.html', title='Developmental', form=form, Child=Child)
         
 
 
@@ -169,7 +169,7 @@ def food():
 
             return redirect(url_for('index'))
     return render_template('events/food.html', title='Food', 
-    form=form)
+    form=form, Child=Child)
 
 @events_blueprint.route('/incident', methods=['GET', 'POST'])
 @login_required
@@ -213,7 +213,7 @@ def incident():
                 db.session.add(incident)
                 db.session.commit()
             return redirect(url_for('index'))
-    return render_template('events/incident.html', title='Incident', form=form)
+    return render_template('events/incident.html', title='Incident', form=form, Child=Child)
 
 @events_blueprint.route('/medication', methods=['GET', 'POST'])
 @login_required
@@ -259,7 +259,7 @@ def medication():
                 db.session.add(medication)
                 db.session.commit()
             return redirect(url_for('index'))
-    return render_template('events/medication.html', title='Medication', form=form)
+    return render_template('events/medication.html', title='Medication', form=form, Child=Child)
 
 @events_blueprint.route('/nappy', methods=['GET', 'POST'])
 @login_required
@@ -303,7 +303,7 @@ def nappy():
                 db.session.add(nappy)
                 db.session.commit()
             return redirect(url_for('index'))
-    return render_template('events/nappy.html', title='Nappy', form=form)
+    return render_template('events/nappy.html', title='Nappy', form=form, Child=Child)
 
 @events_blueprint.route('/note', methods=['GET', 'POST'])
 @login_required
@@ -346,7 +346,7 @@ def note():
                 db.session.add(note)
                 db.session.commit()
             return redirect(url_for('index'))
-    return render_template('events/note.html', title='Note', form=form)
+    return render_template('events/note.html', title='Note', form=form, Child=Child)
 
 @events_blueprint.route('/picture', methods=['GET', 'POST'])
 @login_required
@@ -398,7 +398,7 @@ def picture():
                 db.session.add(picture)
                 db.session.commit()
             return redirect(url_for('index'))
-    return render_template('events/picture.html', title='Picture', form=form)
+    return render_template('events/picture.html', title='Picture', form=form, Child=Child)
 
 @events_blueprint.route('/sleep', methods=['GET', 'POST'])
 @login_required
@@ -442,7 +442,7 @@ def sleep():
                 db.session.commit()
             return redirect(url_for('index'))
     return render_template('events/sleep.html', title='Sleep', 
-    form=form)
+    form=form, Child=Child)
 
 
 @events_blueprint.route('/post/<int:event_id>', methods=['GET', 'POST'])
@@ -483,8 +483,13 @@ def delete_comment(comment_id):
 @login_required
 def delete_event(event_id):
     event = Event.query.get(event_id)
+    comments = Comment.query.filter_by(event_id=event_id).all()
+    if comments:
+        for comment in comments:
+            db.session.delete(comment)
+            db.session.commit()
     if event.user_id == current_user.user_id or current_user.role == 'manager':
         db.session.delete(event)
         db.session.commit()
-    return redirect(url_for('events.index'))
+    return redirect(url_for('index'))
 
