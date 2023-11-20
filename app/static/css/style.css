@@ -230,7 +230,7 @@ input:focus {
 .log {
     display: flex;
     justify-content: flex-start;
-    align-items: flex-start;
+    align-items: center;
     flex-direction: row;
     width: 100%;
     
@@ -401,6 +401,17 @@ input:focus {
     flex: 1;
 }
 
+#picture {
+    border: #000000 1px dotted;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 50px;
+}
+
+
 /* Events Tab */
 
 .events_container {
@@ -481,19 +492,38 @@ input:focus {
 @media screen and (max-width: 768px){
     
     main {
-        padding: 0 0;
+        padding: 0 20px;
+        width: 100%;
+    }
+
+    nav {
+        width: 100%;
+    }
+
+    .links {
+        display: none;
+    }
+
+    .menu {
+        display: none;
+    }
+
+    h1 {
+        margin: 20px;
     }
 
     .feed {
         flex-direction: column;
-        width: 80%;
         margin: 0 10%;
+        padding: 0
     }
 
     .log {
         width: 100%;
-        margin: 20px 0;
         padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        margin-bottom: 30px;
     }
 
     .log p {
@@ -506,5 +536,24 @@ input:focus {
         padding: 20px;
         margin: 0 10%;
         width: 80%;
+    }
+
+    .events {
+        background-color: #222222;
+        height: 420px;
+        width: 200px;
+    }
+
+    .event_links a {
+        color: #FFFFFF;
+    }
+
+    .event_links ul li {
+        margin-bottom: 10px;
+
+    }
+
+    .close_tab {
+        color: #FFFFFF;
     }
 }
