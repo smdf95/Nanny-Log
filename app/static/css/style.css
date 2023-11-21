@@ -489,24 +489,110 @@ input:focus {
     opacity: 0.5;
 }
 
-@media screen and (max-width: 768px){
+@media only screen and (max-width: 768px){
     
+    body {
+        margin-top: 120px;
+    }
+
     main {
         padding: 0 20px;
-        width: 100%;
+        max-width: 100%;
     }
 
     nav {
+        position: fixed;
+        top: 0;
         width: 100%;
+        padding: 30px 0;
+        color: #000000;
+        display: flex;
+        justify-content: space-between;
+        z-index: 1000;
+    }
+    
+
+    nav .links {
+        height: 100vh;
+        position: fixed;
+        display: flex;
+        top: 0;
+        left: -70%;
+        width: 70%;
+        z-index: 10;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+
+        transition: all 1000ms ease-in-out;
+        background-color: #222222;
+
     }
 
-    .links {
-        display: none;
+    nav .openMenu {
+        display: block;
+        color: #FFFFFF;
+        font-size: 40px;
+        cursor: pointer;
+        justify-self: flex-start;
+        margin-left: 20px;
     }
 
-    .menu {
-        display: none;
+    nav .closeMenu {
+        display: block;
+        position: absolute;
+        color: #FFFFFF;
+        top: 25px;
+        left: 20px;
+        font-size: 40px;
+        margin-left: 20px;
+
     }
+
+    nav ul {
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+        align-content: flex-start;
+    }
+
+    nav ul li, .login {
+        text-align: left;
+        padding: 30px;
+        font-size: 35px;
+    }
+
+    nav ul li::after {
+        content: "";
+        display: block; 
+        border-bottom: 1px solid #FFFFFF; 
+        margin-top: 5px; 
+    }
+
+
+    .login {
+        justify-self: flex-start;
+    
+    }
+
+    .login ul {
+        display: flex;
+        flex-direction: row;
+        align-content: flex-end;
+    }
+
+    .login ul li {
+        font-size: 22px;
+    }
+
+    
+    .title {
+        padding-right: 30px;
+        text-align: center;
+        justify-self: flex-end;
+        align-self: center;
+    }
+ 
 
     h1 {
         margin: 20px;
@@ -514,8 +600,8 @@ input:focus {
 
     .feed {
         flex-direction: column;
-        margin: 0 10%;
-        padding: 0
+        width: 100%;
+        margin-top: 20px;
     }
 
     .log {
@@ -523,7 +609,7 @@ input:focus {
         padding: 0;
         display: flex;
         flex-wrap: wrap;
-        margin-bottom: 30px;
+        margin: 30px 0;
     }
 
     .log p {
@@ -555,5 +641,108 @@ input:focus {
 
     .close_tab {
         color: #FFFFFF;
+    }
+
+    .add_event {
+        position: absolute;
+        bottom: 20px;
+        right: -20px;
+        font-size: 50px;
+        color: #008000;
+        transition: all 200ms ease-in-out;
+        cursor: pointer;
+    
+    }
+
+    #picture {
+        
+        padding: 10px;
+    }
+
+    
+    .login_form {
+        margin: 0; 
+        width: auto;
+        padding: 20px 10px;
+    }
+
+    .login_form ul {
+        display: flex;
+        justify-content: center;
+        margin: auto auto 50px;
+        padding: 0;
+        flex-wrap: wrap;
+    }
+    
+    .login_form ul li {
+        margin: 0;
+        padding: 0;
+    }
+
+    .form_profile_picture {
+        display: flex;
+        width: 100px;
+        height: 100px; 
+        overflow: hidden; 
+        border-radius: 50%;
+        margin: 20px 20px;
+        position: relative;
+        justify-content: center;
+    
+    }
+    
+    .description_form textarea {
+        height: 80px;
+        width: 250px;
+        border-radius: 20px;
+        border: #666666 3px solid;
+        padding: 20px;
+        background-color: #EEEEEE;
+    }
+
+    .profile {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+}
+
+@media screen and (max-width: 500px) {
+
+    body {
+        margin-top: 90px;
+    }
+
+    main {
+        margin-top: 20px;
+    }
+    
+    /* Elements */
+
+    h1 {
+        text-align: center;
+        padding: 0 10px;
+    }
+
+    /* Nav */
+
+    nav ul li, .login {
+        padding: 20px;
+        font-size: 25px;
+    }
+
+    .login ul li {
+        margin-top: 50px;
+        font-size: 16px;
+        padding: 5px;
+    }
+
+    nav .openMenu, nav .closeMenu {
+        font-size: 25px;
+    }
+
+    .title {
+        font-size: 20px;
+        margin-right: 0;
     }
 }
