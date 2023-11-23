@@ -68,3 +68,8 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 });
+
+function redirectToUrl(element) {
+    var url = element.dataset.url;
+    window.location.href = url;
+}

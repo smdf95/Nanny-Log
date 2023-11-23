@@ -11,8 +11,8 @@ from flask_mail import Mail
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'mysecret'
-# app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 db = SQLAlchemy(app)
 bcrypt = Bcrypt(app)
 login_manager = LoginManager(app)
@@ -38,13 +38,13 @@ def format_date(event_time):
     three_days_ago = yesterday - timedelta(days=2)
     
     if event_time.date() == today:
-        return f"Today at {event_time.strftime('%H:%M')}"
+        return f"{event_time.strftime('%H:%M')}"
     elif event_time.date() == yesterday:
         return f"Yesterday at {event_time.strftime('%H:%M')}"
     elif event_time.date() >= (three_days_ago):
         return event_time.strftime('%A')  # Format the day name using strftime
     else:
-        return event_time .strftime('%d/%m/%y') # Return the original date for other cases
+        return event_time.strftime('%d/%m/%y') # Return the original date for other cases
 
 app.jinja_env.filters['format_date'] = format_date
 

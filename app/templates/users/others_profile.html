@@ -10,40 +10,113 @@
             <h3>{{ user.email }}</h3>
         </div>
     </div>
+
     <div class="child_assigned">
         <h2>Children</h2>
         {% if user.role == 'parent' %}
-            {% for child in parent.children %}
-            <div class="profile">
-                <div class="profile_picture">
-                    <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
-                    <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
-                    </a>
-                </div>
-                <div class="profile_info">
-                    <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
-                    <h3>{{ child.first_name }} {{ child.last_name }}</h3>
-                    </a>
-                    {% if current_user.role == 'manager' %}
-                        <a href="{{ url_for('children.remove_parent_association', child_id=child.child_id, parent_id=parent.parent_id)}}">Remove Child</a>
+            {% if current_user.role == 'manager' %}
+                {% for child in parent.children %}
+                    <div class="profile">
+                        <div class="profile_picture">
+                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                            <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
+                            </a>
+                        </div>
+                        <div class="profile_info">
+                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                            <h3>{{ child.first_name }} {{ child.last_name }}</h3>
+                            </a>
+                            <a href="{{ url_for('children.remove_parent_association', child_id=child.child_id, parent_id=parent.parent_id)}}">Remove Child</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% elif current_user.role == 'nanny' %}
+                {% for child in parent.children %}
+                    {% if child in current_nanny.children %}
+                    <div class="profile">
+                        <div class="profile_picture">
+                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                            <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
+                            </a>
+                        </div>
+                        <div class="profile_info">
+                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                            <h3>{{ child.first_name }} {{ child.last_name }}</h3>
+                            </a>
+                        </div>
+                    </div>
                     {% endif %}
-                </div>
-            </div>
-
-            {% endfor %}
+                {% endfor %}
+            {% elif current_user.role == 'parent' %}
+                {% for child in parent.children %}
+                    {% if child in current_parent.children %}
+                    <div class="profile">
+                        <div class="profile_picture">
+                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                            <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
+                            </a>
+                        </div>
+                        <div class="profile_info">
+                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                            <h3>{{ child.first_name }} {{ child.last_name }}</h3>
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         {% elif user.role == 'nanny' %}
-            {% for child in nanny.children %}
-                <div class="profile_picture">
-                    <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
-                        <h3>{{ child.first_name }} {{ child.last_name }}</h3>
-                        <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
-                    </a>
-                </div>
-
-                {% if current_user.role == 'manager' %}
-                    <p><a href="{{ url_for('children.remove_nanny_association', child_id=child.child_id, nanny_id=nanny.nanny_id)}}">Remove Child</a></p>
-                {% endif %}
-            {% endfor %}
+            {% if current_user.role == 'manager' %}
+                {% for child in nanny.children %}
+                    <div class="profile">
+                        <div class="profile_picture">
+                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                            <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
+                            </a>
+                        </div>
+                        <div class="profile_info">
+                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                            <h3>{{ child.first_name }} {{ child.last_name }}</h3>
+                            </a>
+                            <a href="{{ url_for('children.remove_nanny_association', child_id=child.child_id, nanny_id=nanny.nanny_id)}}">Remove Child</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% elif current_user.role == 'nanny' %}
+                {% for child in nanny.children %}
+                    {% if child in current_nanny.children %}
+                    <div class="profile">
+                        <div class="profile_picture">
+                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                            <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
+                            </a>
+                        </div>
+                        <div class="profile_info">
+                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                            <h3>{{ child.first_name }} {{ child.last_name }}</h3>
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% elif current_user.role == 'parent' %}
+                {% for child in nanny.children %}
+                    {% if child in current_parent.children %}
+                    <div class="profile">
+                        <div class="profile_picture">
+                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                            <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
+                            </a>
+                        </div>
+                        <div class="profile_info">
+                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                            <h3>{{ child.first_name }} {{ child.last_name }}</h3>
+                            </a>
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         {% endif %}
     </div>
     {% if current_user.role == 'manager' %}

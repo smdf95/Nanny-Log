@@ -491,5 +491,7 @@ def delete_event(event_id):
     if event.user_id == current_user.user_id or current_user.role == 'manager':
         db.session.delete(event)
         db.session.commit()
+        flash('Event deleted successfully!')
+
     return redirect(url_for('index'))
 

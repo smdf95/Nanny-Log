@@ -12,10 +12,11 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+    background-color: #E1E1E1;
 }
 
 main {
-    padding: 30px 250px;
+    padding: 0 250px;
     flex: 1;
     
 }
@@ -43,9 +44,6 @@ nav {
 
 nav .openMenu, nav .closeMenu {
     display: none;
-}
-
-.openMenu i, .closeMenu i {
 }
 
 nav ul {
@@ -147,7 +145,10 @@ input:focus {
 }
 
 .login_form {
-    background-color: rgb(180, 180, 180, 0.6);
+    
+    /* Started as a login form and got used throughout project */
+
+    background-color: rgb(255, 255, 255);
     border-radius: 20px;
     padding: 40px;
     margin: 20px auto; 
@@ -157,7 +158,15 @@ input:focus {
     align-content: center;
     flex-direction: column;
     width: 400px;
+    box-shadow: 0 1px 2px 1px #999999;
+
 }
+
+.login_form input {
+    background-color: #E9E9E9;
+}
+
+
 
 .login_form ul {
     display: flex;
@@ -212,28 +221,49 @@ input:focus {
     height: 80px;
     width: 300px;
     border-radius: 20px;
-    border: #666666 3px solid;
+    border: #666666 1px solid;
     padding: 20px;
-    background-color: #EEEEEE;
+    margin-top: 20px;
+    background-color: #F1F1F1;
+    font-size: 17px;
 }
 
-/* Events Feed */
+#picture {
+    border: #000000 1px dotted;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    flex-wrap: wrap;
+    padding: 50px;
+}
+
+/* Events Feed and Logs */
 
 .feed {
     display: flex;
     justify-content: center;
-    align-items: flex-start;
+    align-items: center;
     flex-direction: column;
     width: 100%;
+    
+}
+
+.feed h1 {
+    margin: 20px
 }
 
 .log {
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: center;
-    flex-direction: row;
-    width: 100%;
-    
+    flex-direction: column;
+    width: 80%;
+    margin: 10px 0;
+    background-color: #FFFFFF;
+    border-radius: 50px;
+    padding: 20px;
+    box-shadow: 0 1px 2px 1px #999999;
 }
 
 .log p {
@@ -244,8 +274,9 @@ input:focus {
 .activity, .sleep, .food, .developmental, .incident, .medication, .nappy, .note, .picture {
     position: relative;
     margin: 20px;
-    width: 70%;
+    width: 100%;
     border-radius: 50px;
+    
 }
 
 .activity {
@@ -284,50 +315,72 @@ input:focus {
     border: #FF69B4 2px solid; /* Hot Pink */
 }
 
-
-
 .event_title_container {
     position: absolute;
-    top: -20px; /* Adjust the top value to fine-tune the positioning */
-    left: 35px; /* Adjust the left value to fine-tune the positioning */
-    padding: 5px; /* Adjust padding as needed */
-    background-color: white; /* Adjust background color as needed */
+    top: -20px;
+    left: 35px;
+    padding: 5px;
+    background-color: #FFFFFF;
     border-radius: 50%;
+    display: flex;
   }
 
+
 .event_title {
-    margin: 0;
+    margin: 0 10px 0 0;
 }
 
 
 .event_info {
     display: flex;
     flex-direction: column;
-    justify-content: center;
-    align-items: center;
+    justify-content: flex-start;
+    align-items: flex-start;
     padding: 20px
+}
+
+.event_info img {
+    margin: 20px;
+    align-self: center;
 }
 
 
 .description {
     font-size: 20px;
     font-weight: 700;
-    text-align: center;
-    padding: 50px 50px 0;
+    text-align: left;
+    padding: 20px;
 
 }
 
 .event_bottom {
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
     justify-content: space-between;
     padding: 2px 40px 10px;
+    width: 80%;
 }
 
 .delete, .timestamp {
     font-size: 14px;
 }
+
+.active_page {
+    font-weight: 600;
+}
+
+.comment_emoji, .delete_comment {
+    display: flex;
+    flex-direction: row;
+}
+
+.fa-solid.fa-comment, .fa-solid.fa-trash {
+    padding: 3px 5px 0 0
+}
+
+
+
+/* Profile and Profile Pictures */
 
 
 .profile {
@@ -337,33 +390,47 @@ input:focus {
 }
 
 .profile_picture {
-    width: 140px; /* Set a fixed width for the container */
-    height: 140px; /* Set a fixed height for the container */
-    overflow: hidden; /* Ensure the circular shape is maintained */
+    width: 140px;
+    height: 140px;
+    overflow: hidden;
     border-radius: 50%;
     margin: 20px;
-    position: relative; /* Positioning context for absolute positioning of the image */
+    position: relative;
 }
 
-.profile_picture img, .comment_profile_picture img, .form_profile_picture img {
-    width: 100%; /* Use 100% width to fill the container */
+.profile_picture img, .comment_profile_picture img, .form_profile_picture img, .log_profile_picture img {
+    width: 100%;
     height: auto;
-    display: block; /* Eliminate any spacing issues */
-    object-fit: cover; /* Ensure the image covers the entire container */
-    object-position: center center; /* Center the image within the container */
-    position: absolute; /* Position the image absolutely within its container */
-    top: 50%; /* Move the top of the image down to the center */
-    left: 50%; /* Move the left of the image to the center */
-    transform: translate(-50%, -50%); /* Center the image using transform */
+    display: block;
+    object-fit: cover;
+    object-position: center center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
 }
 
 .comment_profile_picture {
-    width: 100px; /* Set a fixed width for the container */
-    height: 100px; /* Set a fixed height for the container */
-    overflow: hidden; /* Ensure the circular shape is maintained */
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
     border-radius: 50%;
-    margin: 20px 50px;
-    position: relative; /* Positioning context for absolute positioning of the image */
+    margin: 0 20px;
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.log_profile_picture {
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin: 0 10px;
+    position: relative;
+    display: flex;
+    justify-content: flex-start;
+    top: -10px;
 }
 
 .form_profile_picture {
@@ -378,37 +445,58 @@ input:focus {
 
 }
 
-.active_page {
-    font-weight: 600;
-}
+/* Posts and Comments */
 
 .comment {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-start;
+    background-color: #FFFFFF;
+    padding: 10px;
+    border-radius: 20px;
+    box-shadow: 2px 2px 2px 0 #999999;
+    margin: 25px 50px;
 }
 
 .text {
     font-size: 18px;
+    flex: 1;
+    padding: 20px 0;
+
 }
 
 .commenter {
     font-size: 14px;
-    margin-bottom: 20px;
 }
 
-.text {
-    flex: 1;
+.comment_container a.delete {
+    right: 20px;
 }
 
-#picture {
-    border: #000000 1px dotted;
+.comment_container {
+    width: 80%;
+
+}
+
+.delete_comment, .comment_emoji {
+    cursor: pointer;
+    font-weight: 600;
+
+}
+
+.comment_emoji:hover {
+    color: #00B100;
+}
+
+.delete_comment:hover {
+    color: #FF0000;
+}
+
+.top_comment {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    flex-wrap: wrap;
-    padding: 50px;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%
 }
 
 
@@ -427,8 +515,18 @@ input:focus {
     right: 35px;
     font-size: 50px;
     color: #008000;
-    transition: all 200ms ease-in-out;
     cursor: pointer;
+    text-shadow: #777777 2px 2px 5px;
+    transition: all 200ms ease-in-out;
+
+}
+
+.add_event:hover {
+    font-size: 60px;
+    bottom: 25px;
+    right: 30px;
+    text-shadow: #777777 4px 4px 7px;
+    transition: all 200ms ease-in-out;
 
 }
 
@@ -489,8 +587,11 @@ input:focus {
     opacity: 0.5;
 }
 
+
 @media only screen and (max-width: 768px){
     
+    /* General Styling */
+
     body {
         margin-top: 120px;
     }
@@ -499,6 +600,8 @@ input:focus {
         padding: 0 20px;
         max-width: 100%;
     }
+
+    /* Nav and Menu */
 
     nav {
         position: fixed;
@@ -593,10 +696,13 @@ input:focus {
         align-self: center;
     }
  
+    /* Elements */
 
     h1 {
         margin: 20px;
     }
+
+    /* Feed and Logs */
 
     .feed {
         flex-direction: column;
@@ -624,6 +730,8 @@ input:focus {
         width: 80%;
     }
 
+    /* Add events */
+
     .events {
         background-color: #222222;
         height: 420px;
@@ -636,7 +744,6 @@ input:focus {
 
     .event_links ul li {
         margin-bottom: 10px;
-
     }
 
     .close_tab {
@@ -654,11 +761,12 @@ input:focus {
     
     }
 
+    /* General Forms */
+
     #picture {
         
         padding: 10px;
     }
-
     
     .login_form {
         margin: 0; 
@@ -679,6 +787,14 @@ input:focus {
         padding: 0;
     }
 
+
+    .description_form textarea {
+        height: 50px;
+        width: 80%;
+    }
+
+    /* Profile and Profile Pictures */
+
     .form_profile_picture {
         display: flex;
         width: 100px;
@@ -690,24 +806,45 @@ input:focus {
         justify-content: center;
     
     }
-    
-    .description_form textarea {
-        height: 80px;
-        width: 250px;
-        border-radius: 20px;
-        border: #666666 3px solid;
-        padding: 20px;
-        background-color: #EEEEEE;
-    }
 
     .profile {
         display: flex;
         flex-direction: column;
         align-items: center;
     }
+
+    .comment_profile_picture {
+        width: 50px;
+        height: 50px;
+        overflow: hidden;
+        border-radius: 50%;
+        margin: 20px;
+        position: relative;
+    }
+
+    /* Comments and Posts */
+
+    .comment {
+        display: flex;
+        align-items: center;
+    }
+    
+    .text {
+        font-size: 18px;
+        flex: 1;
+        padding: 10px 0;
+    
+    }
+    
+    .commenter {
+        font-size: 14px;
+        margin-bottom: 0;
+    }
 }
 
 @media screen and (max-width: 500px) {
+
+    /* General Styling */
 
     body {
         margin-top: 90px;
@@ -724,7 +861,7 @@ input:focus {
         padding: 0 10px;
     }
 
-    /* Nav */
+    /* Nav and Menu */
 
     nav ul li, .login {
         padding: 20px;

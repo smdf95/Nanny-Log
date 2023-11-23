@@ -1,24 +1,24 @@
 {% extends 'base.html' %}
 
 {% block main %}
-{% if current_user.is_authenticated %}
-    <h1>Hello {{ current_user.first_name }}</h1>
 
 
 <div class="feed">
+    {% if current_user.is_authenticated %}
+        <h1>Hello {{ current_user.first_name }}</h1>
     {% for event in events.items %}
     <div class="log">
-        <a href="{{ url_for('children.child_profile', child_id=event.children.child_id )}}">
-        <div class="comment_profile_picture">
-            <img src="{{ url_for('static', filename='profile_pics/' + event.children.picture) }}" alt="Child Picture">
-        </div>
-        </a>
         {% if event.activities %}
             {% for activity in event.activities %}
                     <div class="activity">
                         <a href="{{ url_for('events.post', event_id=activity.event_id) }}">
 
                             <div class="event_title_container">
+                                <a href="{{ url_for('children.child_profile', child_id=event.children.child_id )}}">
+                                    <div class="log_profile_picture">
+                                        <img src="{{ url_for('static', filename='profile_pics/' + event.children.picture) }}" alt="Child Picture">
+                                    </div>
+                                </a>
                                 <div class="event_title">
                                     <h4>Activity</h4>
                                 </div>
@@ -30,11 +30,6 @@
                             </div>
                         </a>
                         <div class="event_bottom">
-                            {% if event.user_id == current_user.user_id %}
-                            <div class="delete">
-                                <a href="{{ url_for('events.delete_event', event_id=event.event_id) }}">Delete Log</a>
-                            </div>
-                            {% endif %}
                             <p class="timestamp">
                                 {{ event.event_time|format_date }}
                             </p>
@@ -48,6 +43,11 @@
                         <a href="{{ url_for('events.post', event_id=sleep.event_id) }}">
 
                             <div class="event_title_container">
+                                <a href="{{ url_for('children.child_profile', child_id=event.children.child_id )}}">
+                                    <div class="log_profile_picture">
+                                        <img src="{{ url_for('static', filename='profile_pics/' + event.children.picture) }}" alt="Child Picture">
+                                    </div>
+                                </a>
                                 <div class="event_title">
                                     <h4>Sleep</h4>
                                 </div>
@@ -59,11 +59,6 @@
                             </div>
                         </a>
                         <div class="event_bottom">
-                            {% if event.user_id == current_user.user_id %}
-                            <div class="delete">
-                                <a href="{{ url_for('events.delete_event', event_id=event.event_id) }}">Delete Log</a>
-                            </div>
-                            {% endif %}
                             <p class="timestamp">
                                 {{ event.event_time|format_date }}
                             </p>
@@ -77,6 +72,11 @@
                         <a href="{{ url_for('events.post', event_id=food.event_id) }}">
 
                             <div class="event_title_container">
+                                <a href="{{ url_for('children.child_profile', child_id=event.children.child_id )}}">
+                                    <div class="log_profile_picture">
+                                        <img src="{{ url_for('static', filename='profile_pics/' + event.children.picture) }}" alt="Child Picture">
+                                    </div>
+                                </a>
                                 <div class="event_title">
                                     <h4>{{ food.meal_type | capitalize }}</h4>
                                 </div>
@@ -97,11 +97,6 @@
                             </div>
                         </a>
                         <div class="event_bottom">
-                            {% if event.user_id == current_user.user_id %}
-                            <div class="delete">
-                                <a href="{{ url_for('events.delete_event', event_id=event.event_id) }}">Delete Log</a>
-                            </div>
-                            {% endif %}
                             <p class="timestamp">
                                 {{ event.event_time|format_date }}
                             </p>
@@ -115,6 +110,11 @@
                         <a href="{{ url_for('events.post', event_id=developmental.event_id) }}">
 
                             <div class="event_title_container">
+                                <a href="{{ url_for('children.child_profile', child_id=event.children.child_id )}}">
+                                    <div class="log_profile_picture">
+                                        <img src="{{ url_for('static', filename='profile_pics/' + event.children.picture) }}" alt="Child Picture">
+                                    </div>
+                                </a>
                                 <div class="event_title">
                                     <h4>Developmental Milestone</h4>
                                 </div>
@@ -129,11 +129,6 @@
                             </div>
                         </a>
                         <div class="event_bottom">
-                            {% if event.user_id == current_user.user_id %}
-                            <div class="delete">
-                                <a href="{{ url_for('events.delete_event', event_id=event.event_id) }}">Delete Log</a>
-                            </div>
-                            {% endif %}
                             <p class="timestamp">
                                 {{ event.event_time|format_date }}
                             </p>
@@ -147,6 +142,11 @@
                         <a href="{{ url_for('events.post', event_id=incident.event_id) }}">
 
                             <div class="event_title_container">
+                                <a href="{{ url_for('children.child_profile', child_id=event.children.child_id )}}">
+                                    <div class="log_profile_picture">
+                                        <img src="{{ url_for('static', filename='profile_pics/' + event.children.picture) }}" alt="Child Picture">
+                                    </div>
+                                </a>
                                 <div class="event_title">
                                     <h4>{{ incident.incident_type | capitalize }}</h4>
                                 </div>
@@ -158,11 +158,6 @@
                             </div>
                         </a>
                         <div class="event_bottom">
-                            {% if event.user_id == current_user.user_id %}
-                            <div class="delete">
-                                <a href="{{ url_for('events.delete_event', event_id=event.event_id) }}">Delete Log</a>
-                            </div>
-                            {% endif %}
                             <p class="timestamp">
                                 {{ event.event_time|format_date }}
                             </p>
@@ -176,6 +171,11 @@
                         <a href="{{ url_for('events.post', event_id=medication.event_id) }}">
 
                             <div class="event_title_container">
+                                <a href="{{ url_for('children.child_profile', child_id=event.children.child_id )}}">
+                                    <div class="log_profile_picture">
+                                        <img src="{{ url_for('static', filename='profile_pics/' + event.children.picture) }}" alt="Child Picture">
+                                    </div>
+                                </a>
                                 <div class="event_title">
                                     <h4>Medication</h4>
                                 </div>
@@ -190,11 +190,6 @@
                             </div>
                         </a>
                         <div class="event_bottom">
-                            {% if event.user_id == current_user.user_id %}
-                            <div class="delete">
-                                <a href="{{ url_for('events.delete_event', event_id=event.event_id) }}">Delete Log</a>
-                            </div>
-                            {% endif %}
                             <p class="timestamp">
                                 {{ event.event_time|format_date }}
                             </p>
@@ -208,6 +203,11 @@
                         <a href="{{ url_for('events.post', event_id=nappy.event_id) }}">
 
                             <div class="event_title_container">
+                                <a href="{{ url_for('children.child_profile', child_id=event.children.child_id )}}">
+                                    <div class="log_profile_picture">
+                                        <img src="{{ url_for('static', filename='profile_pics/' + event.children.picture) }}" alt="Child Picture">
+                                    </div>
+                                </a>
                                 <div class="event_title">
                                     <h4>{{ nappy.nappy_type | capitalize }}</h4>
 
@@ -230,11 +230,6 @@
                             </div>
                         </a>
                         <div class="event_bottom">
-                            {% if event.user_id == current_user.user_id %}
-                            <div class="delete">
-                                <a href="{{ url_for('events.delete_event', event_id=event.event_id) }}">Delete Log</a>
-                            </div>
-                            {% endif %}
                             <p class="timestamp">
                                 {{ event.event_time|format_date }}
                             </p>
@@ -248,6 +243,11 @@
                         <a href="{{ url_for('events.post', event_id=note.event_id) }}">
 
                             <div class="event_title_container">
+                                <a href="{{ url_for('children.child_profile', child_id=event.children.child_id )}}">
+                                    <div class="log_profile_picture">
+                                        <img src="{{ url_for('static', filename='profile_pics/' + event.children.picture) }}" alt="Child Picture">
+                                    </div>
+                                </a>
                                 <div class="event_title">
                                     Note
                                 </div>
@@ -259,11 +259,6 @@
                             </div>
                         </a>
                         <div class="event_bottom">
-                            {% if event.user_id == current_user.user_id %}
-                            <div class="delete">
-                                <a href="{{ url_for('events.delete_event', event_id=event.event_id) }}">Delete Log</a>
-                            </div>
-                            {% endif %}
                             <p class="timestamp">
                                 {{ event.event_time|format_date }}
                             </p>
@@ -277,6 +272,11 @@
                         <a href="{{ url_for('events.post', event_id=picture.event_id) }}">
 
                             <div class="event_title_container">
+                                <a href="{{ url_for('children.child_profile', child_id=event.children.child_id )}}">
+                                    <div class="log_profile_picture">
+                                        <img src="{{ url_for('static', filename='profile_pics/' + event.children.picture) }}" alt="Child Picture">
+                                    </div>
+                                </a>
                                 <div class="event_title">
                                     <h4>Picture</h4>
                                 </div>
@@ -289,11 +289,7 @@
                             </div>
                         </a>
                         <div class="event_bottom">
-                            {% if event.user_id == current_user.user_id %}
-                            <div class="delete">
-                                <a href="{{ url_for('events.delete_event', event_id=event.event_id) }}">Delete Log</a>
-                            </div>
-                            {% endif %}
+                            
                             <p class="timestamp">
                                 {{ event.event_time|format_date }}
                             </p>
@@ -301,6 +297,16 @@
                     </div>
                 {% endfor %}
             {% endif %}
+            <div class="event_bottom">
+                <div class="comment_emoji" data-url="{{ url_for('events.post', event_id=event.event_id)}}" onclick="redirectToUrl(this)">
+                    <i class="fa-solid fa-comment"></i><p>Comment</p>
+                </div>
+                {% if event.user_id == current_user.user_id %}
+                    <div class="delete_comment" data-url="{{ url_for('events.delete_event', event_id=event.event_id) }}" onclick="redirectToUrl(this)">
+                        <i class="fa-solid fa-trash"></i><p>Delete</p>
+                    </div>
+                {% endif %}
+            </div>
         </div>
     {% endfor %}
     
@@ -322,6 +328,7 @@
 
 </div>
 
+{% if current_user.role == 'manager' or current_user.role == 'nanny' %}
 <div class="events_container">
     <div class="add_event">
         <i class="fa-solid fa-circle-plus"></i>
@@ -345,6 +352,7 @@
         </div>
     </div>
 </div>
+{% endif %}
 
 {% else %}
     <h1>Welcome</h1>
