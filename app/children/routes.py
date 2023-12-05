@@ -4,6 +4,7 @@ from app.children.forms import ChildForm, AssignChild, EditProfileForm
 from app.models import User, Nanny, Parent, Manager, Parent, Child, Event, Activity, Food, Incident, Developmental, Nappy, Note, Sleep, Medication
 from flask_login import current_user, login_required
 from .utils import save_profile_picture, get_assigned_nannies, get_assigned_parents, manager_required, association_required, calculate_age, get_assigned_children
+from sqlalchemy import text
 
 children_blueprint = Blueprint('children', __name__)
 
@@ -28,11 +29,11 @@ def assign_child():
     ]
 
     form.parent.choices = [
-        (parent.parent_id, f"{user.first_name} {user.last_name}") for parent, user in parents
+        (parent.parent_id, f"{parent.user.first_name} {parent.user.last_name}") for parent in manager.parents
     ]
 
     form.nanny.choices = [
-        (nanny.nanny_id, f"{user.first_name} {user.last_name}") for nanny, user in nannies
+        (nanny.nanny_id, f"{nanny.user.first_name} {nanny.user.last_name}") for nanny in manager.nannies
     ]
 
     if request.method == 'POST':
@@ -156,7 +157,9 @@ def remove_nanny_association(child_id, nanny_id, next):
 @login_required
 @manager_required
 def remove_child(child_id):
-    events = Event.query.filter_by(child_id=child_id).all()
+    events = Event.query\
+            .join(Event.children)\
+            .filter_by(child_id=child_id)
     for event in events:
         activities = Activity.query.filter_by(event_id=event.event_id).all()
         developmentals = Developmental.query.filter_by(event_id=event.event_id).all()
@@ -184,6 +187,20 @@ def remove_child(child_id):
             Sleep.query.filter_by(event_id=event.event_id).delete()
         
         Event.query.filter_by(event_id=event.event_id).delete()
+
+
+    db.session.execute(
+            text("DELETE FROM manager_child WHERE child_id = :child_id"),
+            {"child_id": child_id}
+        )
+    db.session.execute(
+            text("DELETE FROM family WHERE child_id = :child_id"),
+            {"child_id": child_id}
+        )
+    db.session.execute(
+            text("DELETE FROM nanny_child WHERE child_id = :child_id"),
+            {"child_id": child_id}
+        )
     
     Child.query.filter_by(child_id=child_id).delete()
     

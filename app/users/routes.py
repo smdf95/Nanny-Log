@@ -4,6 +4,7 @@ from app.users.forms import LoginForm, RegistrationForm, UpdateProfileForm, Rese
 from app.models import User, Nanny, Parent, Manager, Parent
 from app.users.utils import save_profile_picture, send_reset_email, manager_required
 from flask_login import login_user, current_user, logout_user, login_required
+from sqlalchemy import text
 
 users_blueprint = Blueprint('users', __name__)
 
@@ -165,8 +166,18 @@ def view_profiles():
 def remove_user(user_id):
     user = User.query.filter_by(user_id=user_id).first()
     if user.role == 'nanny':
+        nanny = Nanny.query.filter_by(user_id=user_id).first()
+        db.session.execute(
+            text("DELETE FROM manager_nanny WHERE nanny_id = :nanny_id"),
+            {"nanny_id": nanny.nanny_id}
+        )
         Nanny.query.filter_by(user_id=user_id).delete()
     elif user.role == 'parent':
+        parent = parent.query.filter_by(user_id=user_id).first()
+        db.session.execute(
+            text("DELETE FROM manager_parent WHERE parent_id = :parent_id"),
+            {"parent_id": parent.parent_id}
+        )
         Parent.query.filter_by(user_id=user_id).delete()
     
     User.query.filter_by(user_id=user_id).delete()
