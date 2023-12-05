@@ -7,8 +7,8 @@
         </div>
         <div class="profile_info">
             <h1>{{ child.first_name }} {{ child.last_name }}</h1>
-            <h4>{{ child.dob }} ({{ age }})</h4>
-            <h3>{{ events.total }} Total Logs</h3>
+            <h3>{{ child.dob }} ({{ age }})</h3>
+            <h4>{{ events.total }} Total Logs</h4>
             <div class="top_comment">
                 <p><a href="{{ url_for('children.edit_profile', child_id=child.child_id) }}">Edit Profile</a></p>
                 <div class="delete_comment open_modal" onclick="showRemoveProfileModal({{ child.child_id }})">

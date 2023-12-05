@@ -808,6 +808,20 @@ select {
         max-width: 80%;
     }
 
+    .modal, .comment_modal, .parent_modal, .nanny_modal{
+        width: auto;
+        margin: 20px;
+    }
+
+    .modal_container, .comment_modal_container, .parent_modal_container, .nanny_modal_container {
+        padding-top: 200px;
+    }
+    
+    .delete_modal .delete_comment, .delete_modal .cancel {
+        font-size: 18px;
+    }
+
+
     /* Nav and Menu */
 
     nav {
@@ -1092,7 +1106,7 @@ select {
     /* General Styling */
 
     body {
-        margin-top: 90px;
+        margin-top: 70px;
     }
 
     main {
@@ -1185,5 +1199,12 @@ select {
         border-radius: 5px;
         width: auto;
         margin: 15px 0;
+    }
+
+    .time {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: column;
+        align-items: center;
     }
 }
