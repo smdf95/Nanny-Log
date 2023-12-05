@@ -138,8 +138,8 @@ class Child(db.Model):
     picture = db.Column(db.String(120), nullable=True, default='default.png')
 
     def __repr__(self):
-        parents_names = ', '.join(parent.first_name for parent in self.parents)
-        return f"Child('{self.first_name}', Parents: '{parents_names}')"
+        parents_names = ', '.join(parent.user.first_name for parent in self.parents)
+        return f"Child('{self.first_name} {self.last_name}', Parents: '{parents_names}')"
 
 class Activity(db.Model):
     __tablename__ = 'activities'
@@ -247,10 +247,10 @@ class Event(db.Model):
     event_type = db.Column(db.String(30), nullable=False)
 
     # Relationships
-    child_id = db.Column(db.Integer, db.ForeignKey('children.child_id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
 
-    children = db.relationship('Child', backref=db.backref('events, lazy=True'))
+    children = db.relationship('Child', secondary=events_child, backref=db.backref('events', lazy=True))
+
 
     activities = db.relationship("Activity", backref=db.backref('event', lazy=True))
     developmentals = db.relationship("Developmental", backref=db.backref('event', lazy=True))

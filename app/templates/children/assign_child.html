@@ -6,12 +6,53 @@
     <form class="login_form" method="POST" action="">
         <h2>Assign Children to Parents/Nannies</h2>
         {{ form.hidden_tag() }}
-            {{ form.child.label }}
-            {{ form.child }}
-            {{ form.parent.label }}
-            {{ form.parent }}
-            {{ form.nanny.label }}
-            {{ form.nanny }}
+        <h3>Children</h3>
+            <ul>
+                {% for choice, label in form.child.choices %}
+                {% set child = Child.query.filter_by(child_id=choice).first() %}
+                    <li>
+                        <div class="form_profile_picture">
+                        <label class="custom-checkbox">
+                            <input type="checkbox" name="{{ form.child.name }}" value="{{ choice }}">
+                            <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="{{ child.first_name }} {{ child.last_name }} Profile Picture">
+                        </label>
+                    </div>
+                    <span class="custom-checkbox-label">{{ label }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+            <h3>Parents</h3>
+
+            <ul>
+                {% for choice, label in form.parent.choices %}
+                {% set parent = Parent.query.filter_by(parent_id=choice).first() %}
+                    <li>
+                        <div class="form_profile_picture">
+                        <label class="custom-checkbox">
+                            <input type="checkbox" name="{{ form.parent.name }}" value="{{ choice }}">
+                            <img src="{{ url_for('static', filename='profile_pics/' + parent.user.picture) }}" alt="{{ parent.user.first_name }} {{ parent.user.last_name }} Profile Picture">
+                        </label>
+                    </div>
+                    <span class="custom-checkbox-label">{{ label }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
+            <h3>Nannies</h3>
+
+            <ul>
+                {% for choice, label in form.nanny.choices %}
+                {% set nanny = Nanny.query.filter_by(nanny_id=choice).first() %}
+                    <li>
+                        <div class="form_profile_picture">
+                        <label class="custom-checkbox">
+                            <input type="checkbox" name="{{ form.nanny.name }}" value="{{ choice }}">
+                            <img src="{{ url_for('static', filename='profile_pics/' + nanny.user.picture) }}" alt="{{nanny.user.first_name}} {{ nanny.user.last_name }} Profile Picture">
+                        </label>
+                    </div>
+                    <span class="custom-checkbox-label">{{ label }}</span>
+                    </li>
+                {% endfor %}
+            </ul>
             {{ form.submit }}
 
 

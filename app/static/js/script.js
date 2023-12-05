@@ -73,3 +73,86 @@ function redirectToUrl(element) {
     var url = element.dataset.url;
     window.location.href = url;
 }
+
+
+
+
+function showDeleteModal(event_id) {
+    var modal_container = document.querySelector('.modal_container.modal_container_' + event_id);
+    var modal = document.getElementById('modal_' + event_id);
+    modal_container.style.display = 'block';
+    modal.style.display='block';
+   
+}
+
+function cancel(event_id) {
+    var modal_container = document.querySelector('.modal_container.modal_container_' + event_id);
+    var modal = document.getElementById('modal_' + event_id);
+    modal_container.style.display = 'none';
+    modal.style.display='none';
+   
+}
+
+function showDeleteCommentModal(comment_id) {
+    var modal_container = document.querySelector('.comment_modal_container.comment_modal_container_' + comment_id);
+    var modal = document.getElementById('comment_modal_' + comment_id);
+    modal_container.style.display = 'block';
+    modal.style.display='block';
+}
+
+function cancelCommentModal(comment_id) {
+    var modal_container = document.querySelector('.comment_modal_container.comment_modal_container_' + comment_id);
+    var modal = document.getElementById('comment_modal_' + comment_id);
+    modal_container.style.display = 'none';
+    modal.style.display='none';
+}
+
+function showRemoveParentModal(parent_id) {
+    var modal_container = document.querySelector('.parent_modal_container_' + parent_id);
+    var modal = document.getElementById('parent_modal_' + parent_id);
+    modal_container.style.display = 'block';
+    modal.style.display='block';
+}
+
+function cancelRemoveParent(parent_id) {
+    var modal_container = document.querySelector('.parent_modal_container_' + parent_id);
+    var modal = document.getElementById('parent_modal_' + parent_id);
+    modal_container.style.display = 'none';
+    modal.style.display='none';
+
+}
+
+function showRemoveNannyModal(nanny_id) {
+    var modal_container = document.querySelector('.nanny_modal_container_' + nanny_id);
+    var modal = document.getElementById('nanny_modal_' + nanny_id);
+    modal_container.style.display = 'block';
+    modal.style.display='block';
+}
+
+function cancelRemoveNanny(nanny_id) {
+    var modal_container = document.querySelector('.nanny_modal_container_' + nanny_id);
+    var modal = document.getElementById('nanny_modal_' + nanny_id);
+    modal_container.style.display = 'none';
+    modal.style.display='none';
+
+}
+
+function showRemoveProfileModal(id) {
+    var modal_container = document.querySelector('.profile_modal_container_' + id);
+    var modal = document.getElementById('profile_modal_' + id);
+    modal_container.style.display = 'block';
+    modal.style.display='block';
+}
+
+function cancelRemoveProfile(id) {
+    var modal_container = document.querySelector('.profile_modal_container_' + id);
+    var modal = document.getElementById('profile_modal_' + id);
+    modal_container.style.display = 'none';
+    modal.style.display='none';
+
+}
+
+
+
+
+

@@ -33,6 +33,10 @@ TODO:
 [Done]Add change password to profile
 [Done]Add comments to posts
 [Done]Add picture table
-Add "Are you sure?" Message when deleting profiles
-Add ability to delete events
-Add change pic for children too
+[Done]Add ability to delete events
+[Done]Add change pic for children too
+[Done]Add "Are you sure?" Message when deleting profiles
+[Done]Change style of Flash
+Change Footer
+Change layout of profiles
+[Done]Fix redirect when removing child from parent profile

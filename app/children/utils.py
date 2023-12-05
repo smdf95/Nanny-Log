@@ -91,6 +91,12 @@ def get_assigned_nannies(user, nanny_ids):
 
     return Nanny.query.filter(Nanny.nanny_id.in_(nanny_ids)).all() 
 
+def get_assigned_children(child_ids):
+    if not isinstance(child_ids, list):
+        child_ids = [child_ids] 
+
+    return Child.query.filter(Child.child_id.in_(child_ids)).all()
+
 
 
 def calculate_age(birth_date):

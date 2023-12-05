@@ -20,8 +20,11 @@
                 </li>
             {% endfor %}
         </ul>
-        {{ form.sleep_start(placeholder="Sleep Start") }}
-        {{ form.sleep_end(placeholder="Sleep End") }}
+        <h3>Time of Sleep</h3>
+        <div class="time">
+            {{ form.sleep_start(placeholder="Sleep Start") }} <p>to</p>{{ form.sleep_end(placeholder="Sleep End") }}
+
+        </div>
         {{ form.submit() }}
         
     </form>

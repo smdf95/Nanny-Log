@@ -25,9 +25,9 @@ class AssignChild(FlaskForm):
     """
     Form for assigning children to parents and nannies
     """
-    child = SelectField('Select Child')
-    parent = SelectField('Select Parent')
-    nanny = SelectField('Select Nanny')
+    child = SelectMultipleField('Select Children', coerce=int, widget=widgets.ListWidget(prefix_label=False), option_widget=widgets.CheckboxInput())
+    parent = SelectMultipleField('Select Parent', coerce=int, widget=widgets.ListWidget(prefix_label=False), option_widget=widgets.CheckboxInput())
+    nanny = SelectMultipleField('Select Nanny', coerce=int, widget=widgets.ListWidget(prefix_label=False), option_widget=widgets.CheckboxInput())
     submit = SubmitField('Submit')
 
 class EditProfileForm(FlaskForm):

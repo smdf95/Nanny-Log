@@ -1,44 +1,50 @@
 {% extends 'base.html' %}
 
 {% block main %}
-    <h1>Children</h1>
+<h1>Profiles</h1>
+<h2>Children</h2>
+<div class="profiles">
         {% for child in manager.children %}
-            <div class="profile">
-                <div class="profile_picture">
-                    <a href="{{ url_for('children.child_profile', child_id=child.child_id) }}">
+        <a href="{{ url_for('children.child_profile', child_id=child.child_id) }}">
+            <div class="profile children">
+                <div class="smaller_profile_picture">
                     <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="{{ child.first_name }}" width="100" height="100">
-                    </a>
                 </div>
                 <div class="profile_info">
-                    
-                    <h4><a href="{{ url_for('children.child_profile', child_id=child.child_id) }}">{{ child.first_name }} {{ child.last_name }}</a></h4>
+                    <h4>{{ child.first_name }} {{ child.last_name }}</h4>
                 </div>
             </div>
+        </a>
         {% endfor %}
-        <h1>Parents</h1>
+    </div>
+    <h2>Parents</h2>
+    <div class="profiles">
         {% for parent in manager.parents %}
-            <div class="profile">
-                <div class="profile_picture">
-                    <a href="{{ url_for('users.others_profile', user_id=parent.user_id)}}">
+        <a href="{{ url_for('users.others_profile', user_id=parent.user_id)}}">
+            <div class="profile parents">
+                <div class="smaller_profile_picture">
                     <img src="{{ url_for('static', filename='profile_pics/' + parent.user.picture) }}" alt="Child Picture">
-                    </a>
                 </div>
                 <div class="profile_info">
-                    <h4><a href="{{ url_for('users.others_profile', user_id=parent.user_id)}}">{{ parent.user.first_name }} {{ parent.user.last_name }}</a></h4>
+                    <h4>{{ parent.user.first_name }} {{ parent.user.last_name }}</h4>
                 </div>
             </div>
+        </a>
         {% endfor %}
-        <h1>Nannies</h1>
+    </div>
+    <h2>Nannies</h2>
+    <div class="profiles">
         {% for nanny in manager.nannies %}
-            <div class="profile">
-                <div class="profile_picture">
-                    <a href="{{ url_for('users.others_profile', user_id=nanny.user_id)}}">
+        <a href="{{ url_for('users.others_profile', user_id=nanny.user_id)}}">
+            <div class="profile nannies" data-url="{{ url_for('users.others_profile', user_id=nanny.user_id)}}">
+                <div class="smaller_profile_picture">
                     <img src="{{ url_for('static', filename='profile_pics/' + nanny.user.picture) }}" alt="Child Picture">
-                    </a>
                 </div>
                 <div class="profile_info">
-                    <h4><a href="{{ url_for('users.others_profile', user_id=nanny.user_id)}}">{{ nanny.user.first_name }} {{ nanny.user.last_name }}</a></h4>
+                    <h4>{{ nanny.user.first_name }} {{ nanny.user.last_name }}</h4>
                 </div>
             </div>
+        </a>
         {% endfor %}
+    </div>
 {% endblock %}

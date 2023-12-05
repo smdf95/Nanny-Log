@@ -23,7 +23,8 @@ app.config['MAIL_USERNAME'] = os.environ.get('DB_EMAIL')
 app.config['MAIL_PASSWORD'] = os.environ.get('DB_PASS')
 mail = Mail(app)
 
-from app.models import Nanny, Parent, Manager, Parent, Event
+
+from app.models import Nanny, Parent, Manager, Parent, Event, Child
 from .events.routes import events_blueprint
 from .children.routes import children_blueprint
 from .users.routes import users_blueprint
@@ -73,11 +74,18 @@ def index():
                 child_ids = [child.child_id for child in parent.children]
 
         page = request.args.get('page', 1, type=int)
+        print(child_ids)
         
-        
-        events = Event.query.filter(Event.child_id.in_(child_ids))\
-                    .order_by(Event.event_time.desc())\
-                    .paginate(page=page, per_page=15)
+        events = Event.query\
+            .join(Event.children)\
+            .filter(Child.child_id.in_(child_ids))\
+            .order_by(Event.event_time.desc())\
+            .paginate(page=page, per_page=15)
+
+        print("events:", events.items) 
+        for event in events:
+            print(event.children)
+
         return render_template('index.html', title='Home', events=events, now=datetime.now())
     
     else:

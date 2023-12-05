@@ -12,7 +12,7 @@ body {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    background-color: #E1E1E1;
+    background-color: #EBF2FD;
 }
 
 main {
@@ -29,6 +29,14 @@ footer {
     margin-top: 20px;
 }
 
+.alert {
+    display: flex;
+    justify-content: center;
+    background-color: #00B100;
+    padding: 20px;
+    border-radius: 0 0 20px 20px;
+    font-weight: 600;
+}
 
 
 /* Nav */
@@ -38,7 +46,7 @@ nav {
     grid-template-columns: 1fr 2fr;
     padding: 30px 70px;
     align-items: center;
-    background-color: #222222;
+    background-color: #06367A;
     color: #FFFFFF;
 }
 
@@ -109,6 +117,10 @@ nav, div, form {
     -webkit-tap-highlight-color: transparent;
 }
 
+h1, h2 {
+    margin: 30px 0;
+}
+
 /* General Forms */
 
 form {
@@ -136,6 +148,16 @@ input:focus {
     box-shadow: 
         0px 0px 8px #000000,
         inset 0 0 3px #000000;
+}
+
+input[type="submit"] {
+    transition: all 0.2s ease-in-out;
+}
+
+input[type="submit"]:hover {
+    background-color: #06367A;
+    color: #FFFFFF;
+    transition: all 0.2s ease-in-out;
 }
 
 .form_container {
@@ -186,14 +208,11 @@ input:focus {
     color: #000000;
 }
 
-.login_form a {
-    color: #FFFFFF;
-    text-shadow: #000000 0 0 4px;
-}
+
 
 .login_form a:hover {
-    color: #FFFFFF;
-    text-shadow: #000000 0 0 3px;
+    color: #06367A;
+    font-weight: 600;
 }
 
 .login_form button {
@@ -238,6 +257,27 @@ input:focus {
     padding: 50px;
 }
 
+select {
+    border-radius: 5px;
+    width: 200px;
+    margin: auto;
+    
+}
+
+.time {
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    align-items: center;
+}
+
+.time input {
+    width: 150px;
+}
+
+.time p {
+    padding: 5px;
+}
 /* Events Feed and Logs */
 
 .feed {
@@ -266,9 +306,6 @@ input:focus {
     box-shadow: 0 1px 2px 1px #999999;
 }
 
-.log p {
-    text-align: center;
-}
 
 
 .activity, .sleep, .food, .developmental, .incident, .medication, .nappy, .note, .picture {
@@ -280,48 +317,93 @@ input:focus {
 }
 
 .activity {
-    border: #1E90FF 2px solid; /* Dodger Blue */
+    border: #1E90FF 5px solid; /* Dodger Blue */
+}
+
+.activity div.log_profile_picture {
+    box-shadow: #1E90FF 0 0 3px 2px;
+
 }
 
 .sleep {
-    border: #008000 2px solid; /* Green */
+    border: #008000 5px solid; /* Green */
+}
+
+.sleep div.log_profile_picture {
+    box-shadow: #008800 0 0 3px 2px;
+
 }
 
 .food {
-    border: #FFD700 2px solid; /* Gold */
+    border: #FFD700 5px solid; /* Gold */
+}
+
+.food div.log_profile_picture {
+    box-shadow: #FFD700 0 0 3px 2px;
+
 }
 
 .developmental {
-    border: #FF6347 2px solid; /* Tomato */
+    border: #FF6347 5px solid; /* Tomato */
+}
+
+.developmental div.log_profile_picture {
+    box-shadow: #FF6347 0 0 3px 2px;
+
 }
 
 .incident {
-    border: #8A2BE2 2px solid; /* Blue Violet */
+    border: #8A2BE2 5px solid; /* Blue Violet */
+}
+
+.incident div.log_profile_picture {
+    box-shadow: #8A2BE2 0 0 3px 2px;
+
 }
 
 .medication {
-    border: #FF4500 2px solid; /* Orange Red */
+    border: #FF4500 5px solid; /* Orange Red */
+}
+
+.medication div.log_profile_picture {
+    box-shadow: #FF4500 0 0 3px 2px;
+
 }
 
 .nappy {
-    border: #FF0000 2px solid; 
+    border: #FF0000 5px solid; 
+}
+
+.nappy div.log_profile_picture {
+    box-shadow: #FF0000 0 0 3px 2px;
+
 }
 
 .note {
-    border: #4B0082 2px solid; /* Indigo */
+    border: #4B0082 5px solid; /* Indigo */
+}
+
+.note div.log_profile_picture {
+    box-shadow: #4B0082 0 0 3px 2px;
+
 }
 
 .picture {
-    border: #FF69B4 2px solid; /* Hot Pink */
+    border: #FF69B4 5px solid; /* Hot Pink */
+}
+
+.picture div.log_profile_picture {
+    box-shadow: #FF69B4 0 0 3px 2px;
+
 }
 
 .event_title_container {
     position: absolute;
     top: -20px;
     left: 35px;
-    padding: 5px;
+    padding: 5px 0 5px 10px;
     background-color: #FFFFFF;
-    border-radius: 50%;
+    border-radius: 35%;
     display: flex;
   }
 
@@ -346,11 +428,15 @@ input:focus {
 
 
 .description {
-    font-size: 20px;
-    font-weight: 700;
+    font-size: 18px;
     text-align: left;
     padding: 20px;
 
+}
+
+.event_info.caption {
+    justify-content: center;
+    align-items: center;
 }
 
 .event_bottom {
@@ -378,15 +464,97 @@ input:focus {
     padding: 3px 5px 0 0
 }
 
+.modal_container, .comment_modal_container, .parent_modal_container, .nanny_modal_container {
+    text-align: center;
+    display: none;
+    position: fixed;
+    z-index: 1;
+    padding-top: 100px;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+ }
+
+.modal, .comment_modal, .parent_modal, .nanny_modal{
+    font-size: 20px;
+    font-weight: bold;
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 30%;
+    border-radius: 40px;
+}
+
+.modal h2, .comment_modal h2, .parent_modal h2, .nanny_modal h2{
+    margin: 20px 0;
+}
 
 
+.delete_modal {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 50px
+}
 /* Profile and Profile Pictures */
 
+.profiles {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%
+}
 
 .profile {
     display: flex;
     flex-direction: row;
     align-items: center;
+    margin: 30px 0;
+}
+
+.profile h1 {
+    margin: 0
+}
+
+.profile.children {
+    background-image: linear-gradient(#FF99CC, #FF6666);
+    border-radius: 60px;
+    margin: 0 40px 40px 0;
+    align-items: flex-end;
+}
+
+.profile.parents {
+    background-image: linear-gradient(#00FF00, #229922);
+    border-radius: 60px;
+    margin: 0 40px 40px 0;
+    align-items: flex-end;
+
+}
+
+.profile.nannies {
+    background-image: linear-gradient(#FF0000, #992222);
+    border-radius: 60px;
+    margin: 0 40px 40px 0;
+    align-items: flex-end;
+
+}
+
+.profile.children div.profile_info, .profile.nannies div.profile_info, .profile.parents div.profile_info {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 40px;
+    font-size: 20px;
+    padding-right: 45px;
+    flex-direction: column;
+}
+
+.profile_info .open_modal {
+    font-weight: 500;
+    margin: 0;
+    display: inline-block;
 }
 
 .profile_picture {
@@ -398,7 +566,16 @@ input:focus {
     position: relative;
 }
 
-.profile_picture img, .comment_profile_picture img, .form_profile_picture img, .log_profile_picture img {
+.smaller_profile_picture {
+    width: 100px;
+    height: 100px;
+    overflow: hidden;
+    border-radius: 50%;
+    margin: 20px;
+    position: relative;
+}
+
+.profile_picture img, .smaller_profile_picture img, .comment_profile_picture img, .form_profile_picture img, .log_profile_picture img {
     width: 100%;
     height: auto;
     display: block;
@@ -426,12 +603,19 @@ input:focus {
     height: 50px;
     overflow: hidden;
     border-radius: 50%;
-    margin: 0 10px;
+    margin: 0;
     position: relative;
     display: flex;
     justify-content: flex-start;
     top: -10px;
+
 }
+
+.log_profile_picture.last-img {
+    margin: 0 10px 0 0;
+}
+
+
 
 .form_profile_picture {
     display: flex;
@@ -442,8 +626,16 @@ input:focus {
     margin: 20px 50px;
     position: relative;
     justify-content: center;
+    transition: all 0.2s ease;
 
 }
+
+.form_profile_picture:hover {
+    box-shadow: #06367A 0 0 5px 3px;
+    transition: all 0.2s ease;
+}
+
+
 
 /* Posts and Comments */
 
@@ -478,9 +670,10 @@ input:focus {
 
 }
 
-.delete_comment, .comment_emoji {
+.delete_comment, .comment_emoji, .cancel, .open_modal {
     cursor: pointer;
     font-weight: 600;
+    font-size: 14px;
 
 }
 
@@ -496,7 +689,12 @@ input:focus {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 100%
+    width: 100%;
+}
+
+.top_comment p {
+    font-weight: 500;
+    font-size: 14px
 }
 
 
@@ -514,7 +712,7 @@ input:focus {
     bottom: 20px;
     right: 35px;
     font-size: 50px;
-    color: #008000;
+    color: #06367A;
     cursor: pointer;
     text-shadow: #777777 2px 2px 5px;
     transition: all 200ms ease-in-out;
@@ -535,6 +733,7 @@ input:focus {
     margin: 10px 0 0;
     padding: 0;
     cursor: pointer;
+    color: #06367A;
 }
 
 
@@ -556,7 +755,15 @@ input:focus {
 
 .events ul li {
     font-size: 20px;
+    font-weight: 500;
     text-align: center;
+
+}
+
+.events ul li a:hover {
+    color: #06367A; 
+    font-weight: 600;   
+
 }
 
 /* Add Event Page */
@@ -588,7 +795,7 @@ input:focus {
 }
 
 
-@media only screen and (max-width: 768px){
+@media only screen and (max-width: 868px){
     
     /* General Styling */
 
@@ -597,8 +804,8 @@ input:focus {
     }
 
     main {
-        padding: 0 20px;
-        max-width: 100%;
+        padding: 0 10%;
+        max-width: 80%;
     }
 
     /* Nav and Menu */
@@ -628,7 +835,7 @@ input:focus {
         align-items: center;
 
         transition: all 1000ms ease-in-out;
-        background-color: #222222;
+        background-color: #06367A;
 
     }
 
@@ -702,19 +909,23 @@ input:focus {
         margin: 20px;
     }
 
+    h2 {
+        text-align: center;
+        padding: 0;
+    }
+
     /* Feed and Logs */
 
     .feed {
         flex-direction: column;
-        width: 100%;
-        margin-top: 20px;
+        width: 70%;
+        margin: 20px 15% 0;
     }
 
     .log {
         width: 100%;
-        padding: 0;
+        padding: 10px 0;
         display: flex;
-        flex-wrap: wrap;
         margin: 30px 0;
     }
 
@@ -725,15 +936,15 @@ input:focus {
 
     .activity, .sleep, .food, .developmental, .incident, .medication, .nappy, .note, .picture {
         border-radius: 50px;
-        padding: 20px;
-        margin: 0 10%;
-        width: 80%;
+        padding: 20px 0;
+        margin: 20px 0;
+        width: 90%;
     }
 
     /* Add events */
 
     .events {
-        background-color: #222222;
+        background-color: #06367A;
         height: 420px;
         width: 200px;
     }
@@ -755,9 +966,13 @@ input:focus {
         bottom: 20px;
         right: -20px;
         font-size: 50px;
-        color: #008000;
         transition: all 200ms ease-in-out;
         cursor: pointer;
+    
+    }
+
+    .add_event:hover {
+        right: -20px;
     
     }
 
@@ -769,8 +984,8 @@ input:focus {
     }
     
     .login_form {
-        margin: 0; 
-        width: auto;
+        margin:  50px 20%; 
+        width: 60%;
         padding: 20px 10px;
     }
 
@@ -786,6 +1001,7 @@ input:focus {
         margin: 0;
         padding: 0;
     }
+
 
 
     .description_form textarea {
@@ -807,10 +1023,34 @@ input:focus {
     
     }
 
+    .profiles {
+        justify-content: center;
+        gap: 30px
+
+    }
+
+
     .profile {
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+
+    .profile.children, .profile.nannies, .profile.parents {
+        align-items: center;
+        width: 210px;
+        margin: 0;
+        
+    }
+
+    .profile.children div.profile_info, .profile.nannies div.profile_info, .profile.parents div.profile_info {
+        justify-content: center;
+        padding: 20px;
+        text-align: center;
+    }
+
+    .profile h2 {
+        font-size: 30px;
     }
 
     .comment_profile_picture {
@@ -824,9 +1064,14 @@ input:focus {
 
     /* Comments and Posts */
 
+    .comments {
+        width: 100%;
+    }
+
     .comment {
         display: flex;
         align-items: center;
+        margin: 25px;
     }
     
     .text {
@@ -881,5 +1126,41 @@ input:focus {
     .title {
         font-size: 20px;
         margin-right: 0;
+    }
+
+    /* Log and Feed */
+
+    .feed {
+        width: 100%;
+        margin: 20px 0;
+    }
+
+    /* Comments */
+
+    .comments {
+        margin: 25px 0;
+        
+    }
+
+    .comment {
+        align-items: flex-start;
+        width: 100%;
+        margin: 25px 0;
+
+    }
+
+    .login_form {
+        width: 90%;
+        margin: auto 5%;
+    }
+
+    input[type="submit"] {
+        width: auto;
+    }
+    
+    input[type="submit"]:hover {
+        background-color: #06367A;
+        color: #FFFFFF;
+        transition: all 0.2s ease-in-out;
     }
 }

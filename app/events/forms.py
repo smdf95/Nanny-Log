@@ -12,7 +12,6 @@ class ActivitiesForm(FlaskForm):
     Activities form
     """
     child = SelectMultipleField('Select Children', coerce=int, widget=widgets.ListWidget(prefix_label=False), option_widget=widgets.CheckboxInput())
-    duration = IntegerField('Duration in Minutes', validators=[DataRequired()])
     description = TextAreaField('Description', validators=[DataRequired()])
     picture = FileField('Upload Picture', validators=[FileAllowed(['jpg', 'png'])])
     submit = SubmitField('Submit')

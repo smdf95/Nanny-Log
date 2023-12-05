@@ -7,46 +7,96 @@
         </div>
         <div class="profile_info">
             <h1>{{ child.first_name }} {{ child.last_name }}</h1>
-            <h3>{{ events.total }} Total Logs</h3>
             <h4>{{ child.dob }} ({{ age }})</h4>
-            <p><a href="{{ url_for('children.edit_profile', child_id=child.child_id) }}">Edit Profile</a></p>
+            <h3>{{ events.total }} Total Logs</h3>
+            <div class="top_comment">
+                <p><a href="{{ url_for('children.edit_profile', child_id=child.child_id) }}">Edit Profile</a></p>
+                <div class="delete_comment open_modal" onclick="showRemoveProfileModal({{ child.child_id }})">
+                    <p>Remove Child</p>
+                </div>
+            </div>
         </div>
     </div>
     <div class="child_assigned">
         <h2>Parents</h2>
-        {% for parent in child.parents %}
-            <div class="profile">
-                <div class="profile_picture">
-                    <a href="{{ url_for('users.others_profile', user_id=parent.user_id)}}">
-                    <img src="{{ url_for('static', filename='profile_pics/' + parent.user.picture) }}" alt="Child Picture">
-                    </a>
+
+        <div class="profiles">
+
+            {% for parent in child.parents %}
+                <div class="profile parents">
+                    <div class="smaller_profile_picture">
+                        <a href="{{ url_for('users.others_profile', user_id=parent.user_id)}}">
+                        <img src="{{ url_for('static', filename='profile_pics/' + parent.user.picture) }}" alt="Child Picture">
+                        </a>
+                    </div>
+                    <div class="profile_info">
+                        <h4><a href="{{ url_for('users.others_profile', user_id=parent.user_id)}}">{{ parent.user.first_name }} {{ parent.user.last_name }}</a></h4>
+                        <div class="profile_bottom">
+
+                            {% if current_user.role == 'manager' %}
+                                <div class="open_modal" onclick="showRemoveParentModal({{ parent.parent_id }})">
+                                    <p>Remove as Parent</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="parent_modal_container parent_modal_container_{{ parent.parent_id }}">
+                            <dialog class="parent_modal" id="parent_modal_{{ parent.parent_id }}">
+                                <h2>Remove as Parent</h2>
+                                <p>Are you sure you want to remove {{parent.user.first_name}} as a parent of {{ child.first_name }}?</p>
+                                <div class="delete_modal">
+                                    <div class="delete_comment" data-url="{{ url_for('children.remove_parent_association', child_id=child.child_id, parent_id=parent.parent_id, next='child')}}" onclick="redirectToUrl(this)">
+                                        <p>Remove</p>
+                                    </div>
+                                    <div class="cancel" onclick="cancelRemoveParent({{ parent.parent_id }})">
+                                        <p>Cancel</p>
+                                    </div>
+                                </div>
+                            </dialog>
+                        </div>
+                    </div>
+                    
                 </div>
-                <div class="profile_info">
-                    <h4><a href="{{ url_for('users.others_profile', user_id=parent.user_id)}}">{{ parent.user.first_name }} {{ parent.user.last_name }}</a></h4>
-                    {% if current_user.role == 'manager' %}
-                        <a href="{{ url_for('children.remove_parent_association', child_id=child.child_id, parent_id=parent.parent_id)}}">Remove as Parent</a>
-                    {% endif %}
-                </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
     <div class="child_assigned">
         <h2>Nannies</h2>
-        {% for nanny in child.nannies %}
-            <div class="profile">
-                <div class="profile_picture">
-                    <a href="{{ url_for('users.others_profile', user_id=nanny.user_id)}}">
-                    <img src="{{ url_for('static', filename='profile_pics/' + nanny.user.picture) }}" alt="Child Picture">
-                    </a>
+        <div class="profiles">
+
+            {% for nanny in child.nannies %}
+                <div class="profile nannies">
+                    <div class="smaller_profile_picture">
+                        <a href="{{ url_for('users.others_profile', user_id=nanny.user_id)}}">
+                        <img src="{{ url_for('static', filename='profile_pics/' + nanny.user.picture) }}" alt="Child Picture">
+                        </a>
+                    </div>
+                    <div class="profile_info">
+                        <h4><a href="{{ url_for('users.others_profile', user_id=nanny.user_id)}}">{{ nanny.user.first_name }} {{ nanny.user.last_name }}</a></h4>
+                        <div class="profile_bottom">
+                            {% if current_user.role == 'manager' %}
+                                <div class="open_modal" onclick="showRemoveNannyModal({{ nanny.nanny_id }})">
+                                    <p>Remove as Nanny</p>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="nanny_modal_container nanny_modal_container_{{ nanny.nanny_id }}">
+                            <dialog class="nanny_modal" id="nanny_modal_{{ nanny.nanny_id }}">
+                                <h2>Remove as Nanny</h2>
+                                <p>Are you sure you want to remove {{ nanny.user.first_name}} as a nanny of {{ child.first_name }}?</p>
+                                <div class="delete_modal">
+                                    <div class="delete_comment" data-url="{{ url_for('children.remove_nanny_association', child_id=child.child_id, nanny_id=nanny.nanny_id, next='nanny')}}" onclick="redirectToUrl(this)">
+                                        <p>Remove</p>
+                                    </div>
+                                    <div class="cancel" onclick="cancelRemoveNanny({{ nanny.nanny_id }})">
+                                        <p>Cancel</p>
+                                    </div>
+                                </div>
+                            </dialog>
+                        </div>
+                    </div>
                 </div>
-                <div class="profile_info">
-                    <h4><a href="{{ url_for('users.others_profile', user_id=nanny.user_id)}}">{{ nanny.user.first_name }} {{ nanny.user.last_name }}</a></h4>
-                    {% if current_user.role == 'manager' %}
-                        <a href="{{ url_for('children.remove_nanny_association', child_id=child.child_id, nanny_id=nanny.nanny_id)}}">Remove as Nanny</a>
-                    {% endif %}
-                </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
+        </div>
     </div>
 
     <h2>Log Feed</h2>
@@ -54,253 +104,380 @@
         {% for event in events.items %}
             <div class="log">
                 {% if event.activities %}
-                    {% for activity in event.activities %}
-                        <div class="activity">
-                            <a href="{{ url_for('events.post', event_id=activity.event_id) }}">
-                                <div class="event_title_container">
-                                    <div class="event_title">
-                                        <h4>Activity</h4>
+            {% for activity in event.activities %}
+                    <div class="activity">
+                        <a href="{{ url_for('events.post', event_id=activity.event_id) }}">
+
+                            <div class="event_title_container">
+                                {% for child in event.children %}
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id )}}">
+                                    <div class="log_profile_picture {% if loop.last %}last-img{% endif %}">
+                                        <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
                                     </div>
+                                </a>
+                                {% endfor %}
+                                <div class="event_title">
+                                    <h4>Activity</h4>
                                 </div>
-                                <div class="event_info">
-                                    <p class="description">
-                                        {{ event.children.first_name }} {{ activity.description }} for {{ activity.duration }} minutes.
-                                    </p>
-                                </div>
-                            </a>
-                            <div class="event_bottom">
-                                <p class="timestamp">
-                                    {{ event.event_time|format_date }}
+                            </div>
+                            <div class="event_info">
+                                <p class="description">
+                                    {{ activity.description }}
                                 </p>
                             </div>
+                        </a>
+                        <div class="event_bottom">
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
                         </div>
-                    {% endfor %}
-                {% endif %}
-                {% if event.sleeps %}
-                    {% for sleep in event.sleeps %}
-                        <div class="sleep">
-                            <a href="{{ url_for('events.post', event_id=sleep.event_id) }}">
+                    </div>
+            {% endfor %}
+        {% endif %}
+        {% if event.sleeps %}
+            {% for sleep in event.sleeps %}
+                    <div class="sleep">
+                        <a href="{{ url_for('events.post', event_id=sleep.event_id) }}">
 
-                                <div class="event_title_container">
-                                    <div class="event_title">
-                                        <h4>Sleep</h4>
+                            <div class="event_title_container">
+                                {% for child in event.children %}
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id )}}">
+                                    <div class="log_profile_picture {% if loop.last %}last-img{% endif %}">
+                                        <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
                                     </div>
+                                </a>
+                                {% endfor %}
+                                <div class="event_title">
+                                    <h4>Sleep</h4>
                                 </div>
-                                <div class="event_info">
-                                    <p class="description">
-                                        {{event.children.first_name}} went to sleep at {{ sleep.sleep_start }} and woke up at {{ sleep.sleep_end }}.
-                                    </p>
-                                </div>
-                            </a>
-                            <div class="event_bottom">
-                                <p class="timestamp">
-                                    {{ event.event_time|format_date }}
-                                </p>
                             </div>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-                {% if event.foods %}
-                    {% for food in event.foods %}
-                        <div class="food">
-                            <a href="{{ url_for('events.post', event_id=food.event_id) }}">
-
-                                <div class="event_title_container">
-                                    <div class="event_title">
-                                        <h4>{{ food.meal_type | capitalize }}</h4>
-                                    </div>
-                                </div>
-                                <div class="event_info">
+                            <div class="event_info">
+                                {% if event.children %}
                                     <p class="description">
-                                        {% if event.children.gender == "m" %}
-                                            {{event.children.first_name}} had {{ food.description }} for his {{ food.meal_type }}.
-                                        {% elif event.children.gender == "f" %}
-                                            {{event.children.first_name}} had {{ food.description }} for her {{ food.meal_type }}.
+                                        {% for child in event.children %}
+                                        {% if loop.length > 2 %}
+                                            {% if not loop.last %}
+                                                {{ child.first_name }},
+                                            {% elif loop.last %}
+                                                and {{ child.first_name }}
+                                            {% endif %}
+                                        {% elif loop.length == 2 %}
+                                            {% if not loop.last %}
+                                                {{ child.first_name }} and
+                                            {% elif loop.last %}
+                                                {{ child.first_name }}
+                                            {% endif %}
                                         {% else %}
-                                            {{event.children.first_name}} had {{ food.description }} for their {{ food.meal_type }}.
+                                            {{ child.first_name }}
                                         {% endif %}
+                                        {% endfor %}
+                                        went to sleep at {{ sleep.sleep_start }}
+                                        and woke up at {{ sleep.sleep_end }}.
                                     </p>
-                                    {% if food.picture %}
-                                        <img src="{{ url_for('static', filename='event_pics/' + food.picture) }}" alt="Food">
+                                {% endif %}
+
+                            </div>
+                        </a>
+                        <div class="event_bottom">
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
+                        </div>
+                    </div>
+            {% endfor %}
+        {% endif %}
+        {% if event.foods %}
+            {% for food in event.foods %}
+                    <div class="food">
+                        <a href="{{ url_for('events.post', event_id=food.event_id) }}">
+
+                            <div class="event_title_container">
+                                {% for child in event.children %}
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id )}}">
+                                    <div class="log_profile_picture {% if loop.last %}last-img{% endif %}">
+                                        <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
+                                    </div>
+                                </a>
+                                {% endfor %}
+                                <div class="event_title">
+                                    <h4>{{ food.meal_type | capitalize }}</h4>
+                                </div>
+                            </div>
+                            <div class="event_info">
+                                <p class="description">
+                                    {{ food.description }}
+                                </p>
+                                {% if food.picture %}
+                                    <img src="{{ url_for('static', filename='event_pics/' + food.picture) }}" alt="Food">
+                                {% endif %}
+                            </div>
+                        </a>
+                        <div class="event_bottom">
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
+                        </div>
+                    </div>
+            {% endfor %}
+        {% endif %}
+        {% if event.developmentals %}
+            {% for developmental in event.developmentals %}
+                    <div class="developmental">
+                        <a href="{{ url_for('events.post', event_id=developmental.event_id) }}">
+
+                            <div class="event_title_container">
+                                {% for child in event.children %}
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id )}}">
+                                    <div class="log_profile_picture {% if loop.last %}last-img{% endif %}">
+                                        <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
+                                    </div>
+                                </a>
+                                {% endfor %}
+                                <div class="event_title">
+                                    <h4>Developmental Milestone</h4>
+                                </div>
+                            </div>
+                            <div class="event_info">
+                                <p class="description">
+                                    {{developmental.description}}.
+                                </p>
+                                {% if developmental.picture %}
+                                    <img src="{{ url_for('static', filename='event_pics/' + food.picture) }}" alt="Developmental">
+                                {% endif %}
+                            </div>
+                        </a>
+                        <div class="event_bottom">
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
+                        </div>
+                    </div>
+            {% endfor %}
+        {% endif %}
+        {% if event.incidents %}
+            {% for incident in event.incidents %}
+                    <div class="incident">
+                        <a href="{{ url_for('events.post', event_id=incident.event_id) }}">
+
+                            <div class="event_title_container">
+                                {% for child in event.children %}
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id )}}">
+                                    <div class="log_profile_picture {% if loop.last %}last-img{% endif %}">
+                                        <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
+                                    </div>
+                                </a>
+                                {% endfor %}
+                                <div class="event_title">
+                                    <h4>{{ incident.incident_type | capitalize }}</h4>
+                                </div>
+                            </div>
+                            <div class="event_info">
+                                <p class="description">
+                                    {{incident.description}}
+                                </p>
+                            </div>
+                        </a>
+                        <div class="event_bottom">
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
+                        </div>
+                    </div>
+            {% endfor %}
+        {% endif %}
+        {% if event.medications %}
+            {% for medication in event.medications %}
+                    <div class="medication">
+                        <a href="{{ url_for('events.post', event_id=medication.event_id) }}">
+
+                            <div class="event_title_container">
+                                {% for child in event.children %}
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id )}}">
+                                    <div class="log_profile_picture {% if loop.last %}last-img{% endif %}">
+                                        <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
+                                    </div>
+                                </a>
+                                {% endfor %}
+                                <div class="event_title">
+                                    <h4>Medication</h4>
+                                </div>
+                            </div>
+                            <div class="event_info">
+                                <p class="description">
+                                    {% for child in event.children %}
+                                        {% if loop.length > 2 %}
+                                            {% if not loop.last %}
+                                                {{ child.first_name }},
+                                            {% elif loop.last %}
+                                                and {{ child.first_name }} were
+                                            {% endif %}
+                                        {% elif loop.length == 2 %}
+                                            {% if not loop.last %}
+                                                {{ child.first_name }} and
+                                            {% elif loop.last %}
+                                                {{ child.first_name }} were
+                                            {% endif %}
+                                        {% else %}
+                                            {{ child.first_name }} was
+                                        {% endif %}
+                                    {% endfor %}
+                                    given {{ medication.amount }} of {{ medication.medication_name }} at {{ medication.time_given }}
+                                    {% if medication.reason %}
+                                        due to {{ medication.reason }}
                                     {% endif %}
-                                </div>
-                            </a>
-                            <div class="event_bottom">
-                                <p class="timestamp">
-                                    {{ event.event_time|format_date }}
                                 </p>
                             </div>
+                        </a>
+                        <div class="event_bottom">
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
                         </div>
-                    {% endfor %}
-                {% endif %}
-                {% if event.developmentals %}
-                    {% for developmental in event.developmentals %}
-                        <div class="developmental">
-                            <a href="{{ url_for('events.post', event_id=developmental.event_id) }}">
+                    </div>
+            {% endfor %}
+        {% endif %}
+        {% if event.nappies %}
+            {% for nappy in event.nappies %}
+                    <div class="nappy">
+                        <a href="{{ url_for('events.post', event_id=nappy.event_id) }}">
 
-                                <div class="event_title_container">
-                                    <div class="event_title">
-                                        <h4>Developmental Milestone</h4>
+                            <div class="event_title_container">
+                                {% for child in event.children %}
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id )}}">
+                                    <div class="log_profile_picture {% if loop.last %}last-img{% endif %}">
+                                        <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
                                     </div>
+                                </a>
+                                {% endfor %}
+                                <div class="event_title">
+                                    <h4>{{ nappy.nappy_type | capitalize }}</h4>
+
                                 </div>
-                                <div class="event_info">
-                                    <p class="description">
-                                        {{event.children.first_name}} {{developmental.description}}.
-                                    </p>
-                                    {% if developmental.picture %}
-                                        <img src="{{ url_for('static', filename='event_pics/' + food.picture) }}" alt="Developmental">
+                            </div>
+                            <div class="event_info">
+                                <p class="description">
+                                    {% for child in event.children %}
+                                        {% if loop.length > 2 %}
+                                            {% if not loop.last %}
+                                                {{ child.first_name }},
+                                            {% elif loop.last %}
+                                                and {{ child.first_name }}
+                                            {% endif %}
+                                        {% elif loop.length == 2 %}
+                                            {% if not loop.last %}
+                                                {{ child.first_name }} and
+                                            {% elif loop.last %}
+                                                {{ child.first_name }}
+                                            {% endif %}
+                                        {% else %}
+                                            {{ child.first_name }}
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% if nappy.nappy_type == "nappy" %}
+                                        had a nappy change.
+                                    {% elif nappy.nappy_type == "potty" %}
+                                        used the potty.
                                     {% endif %}
-                                </div>
-                            </a>
-                            <div class="event_bottom">
-                                <p class="timestamp">
-                                    {{ event.event_time|format_date }}
                                 </p>
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-                {% if event.incidents %}
-                    {% for incident in event.incidents %}
-                        <div class="incident">
-                            <a href="{{ url_for('events.post', event_id=incident.event_id) }}">
-
-                                <div class="event_title_container">
-                                    <div class="event_title">
-                                        <h4>{{ incident.incident_type | capitalize }}</h4>
-                                    </div>
-                                </div>
-                                <div class="event_info">
-                                    <p class="description">
-                                        {{incident.description}}
-                                    </p>
-                                </div>
-                            </a>
-                            <div class="event_bottom">
-                                <p class="timestamp">
-                                    {{ event.event_time|format_date }}
-                                </p>
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-                {% if event.medications %}
-                    {% for medication in event.medications %}
-                        <div class="medication">
-                            <a href="{{ url_for('events.post', event_id=medication.event_id) }}">
-
-                                <div class="event_title_container">
-                                    <div class="event_title">
-                                        <h4>Medication</h4>
-                                    </div>
-                                </div>
-                                <div class="event_info">
-                                    <p class="description">
-                                        {{ event.children.first_name }} was given {{ medication.amount }} of {{ medication.medication_name }} at {{ medication.time_given }}
-                                        {% if medication.reason %}
-                                            due to {{ medication.reason }}
-                                        {% endif %}
-                                    </p>
-                                </div>
-                            </a>
-                            <div class="event_bottom">
-                                <p class="timestamp">
-                                    {{ event.event_time|format_date }}
-                                </p>
-                            </div>
-                        </div>
-                    {% endfor %}
-                {% endif %}
-                {% if event.nappies %}
-                    {% for nappy in event.nappies %}
-                        <div class="nappy">
-                            <a href="{{ url_for('events.post', event_id=nappy.event_id) }}">
-
-                                <div class="event_title_container">
-                                    <div class="event_title">
-                                        <h4>{{ nappy.nappy_type | capitalize }}</h4>
-
-                                    </div>
-                                </div>
-                                <div class="event_info">
-                                    <p class="description">
-                                        {% if nappy.nappy_type == "nappy" %}
-                                            {{ event.children.first_name }} had a nappy change.
-                                        {% elif nappy.nappy_type == "potty" %}
-                                            {{ event.children.first_name }} used the potty.
-                                        {% endif %}
-                                    </p>
+                                {% if nappy.condition %}
                                     <br>
-                                    <p>
-                                        {% if nappy.condition %}
-                                            Additional info: {{ nappy.condition }}
-                                        {% endif %}
-                                    </p>
-                                </div>
-                            </a>
-                            <div class="event_bottom">
-                                <p class="timestamp">
-                                    {{ event.event_time|format_date }}
-                                </p>
+                                    <p>Additional info: {{ nappy.condition }}</p>
+                                {% endif %}
                             </div>
+                        </a>
+                        <div class="event_bottom">
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
                         </div>
-                    {% endfor %}
-                {% endif %}
-                {% if event.notes %}
-                    {% for note in event.notes %}
-                        <div class="note">
-                            <a href="{{ url_for('events.post', event_id=note.event_id) }}">
+                    </div>
+            {% endfor %}
+        {% endif %}
+        {% if event.notes %}
+            {% for note in event.notes %}
+                    <div class="note">
+                        <a href="{{ url_for('events.post', event_id=note.event_id) }}">
 
-                                <div class="event_title_container">
-                                    <div class="event_title">
-                                        Note
+                            <div class="event_title_container">
+                                {% for child in event.children %}
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id )}}">
+                                    <div class="log_profile_picture {% if loop.last %}last-img{% endif %}">
+                                        <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
                                     </div>
+                                </a>
+                                {% endfor %}
+                                <div class="event_title">
+                                    <h4>Note</h4>
                                 </div>
-                                <div class="event_info">
-                                    <p class="description">
-                                        {{  note.description }}
-                                    </p>
-                                </div>
-                            </a>
-                            <div class="event_bottom">
-                                <p class="timestamp">
-                                    {{ event.event_time|format_date }}
+                            </div>
+                            <div class="event_info">
+                                <p class="description">
+                                    {{ note.description }}
                                 </p>
                             </div>
+                        </a>
+                        <div class="event_bottom">
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
                         </div>
-                    {% endfor %}
-                {% endif %}
-                {% if event.pictures %}
-                    {% for picture in event.pictures %}
-                        <div class="picture">
-                            <a href="{{ url_for('events.post', event_id=picture.event_id) }}">
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% if event.pictures %}
+            {% for picture in event.pictures %}
+                    <div class="picture">
+                        <a href="{{ url_for('events.post', event_id=picture.event_id) }}">
 
-                                <div class="event_title_container">
-                                    <div class="event_title">
-                                        <h4>Picture</h4>
+                            <div class="event_title_container">
+                                {% for child in event.children %}
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id )}}">
+                                    <div class="log_profile_picture {% if loop.last %}last-img{% endif %}">
+                                        <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
                                     </div>
+                                </a>
+                                {% endfor %}
+                                <div class="event_title">
+                                    <h4>Picture</h4>
                                 </div>
-                                <div class="event_info">
-                                    <img src="{{ url_for('static', filename='event_pics/' + picture.picture_file) }}" alt="Picture">
-                                    <p class="description">
-                                        {{  picture.caption }}
-                                    </p>
-                                </div>
-                            </a>
-                            <div class="event_bottom">
-                                <p class="timestamp">
-                                    {{ event.event_time|format_date }}
+                            </div>
+                            <div class="event_info caption">
+                                <img src="{{ url_for('static', filename='event_pics/' + picture.picture_file) }}" alt="Picture">
+                                <p class="description">
+                                    {{ picture.caption }}
                                 </p>
                             </div>
+                        </a>
+                        <div class="event_bottom">
+                            
+                            <p class="timestamp">
+                                {{ event.event_time|format_date }}
+                            </p>
                         </div>
-                    {% endfor %}
-                {% endif %}
+                    </div>
+                {% endfor %}
+            {% endif %}
+                <div class="modal_container">
+                    <dialog class="modal" id="modal">
+                        <h2>Delete Post</h2>
+                        <p>Are you sure you want to delete this post?</p>
+                        <div class="delete_modal">
+                            <div class="delete_comment" data-url="{{ url_for('events.delete_event', event_id=event.event_id) }}" onclick="redirectToUrl(this)">
+                                <p>Delete</p>
+                            </div>
+                            <div class="cancel" onclick="cancel('.modal_container', '.modal')">
+                                <p>Cancel</p>
+                            </div>
+    
+                        </div>
+                    </dialog>
+                </div>
                 <div class="event_bottom">
                     <div class="comment_emoji" data-url="{{ url_for('events.post', event_id=event.event_id)}}" onclick="redirectToUrl(this)">
                         <i class="fa-solid fa-comment"></i><p>Comment</p>
                     </div>
                     {% if event.user_id == current_user.user_id %}
-                        <div class="delete_comment" data-url="{{ url_for('events.delete_event', event_id=event.event_id) }}" onclick="redirectToUrl(this)">
+                        <div class="delete_comment open_modal" onclick="showDeleteModal('.modal_container', '.modal')">
                             <i class="fa-solid fa-trash"></i><p>Delete</p>
                         </div>
                     {% endif %}
@@ -308,24 +485,39 @@
             </div>
             
             {% endfor %}
+            {% if events.pages > 1 %}
+                <div class="pagination">
+                    {% for page_num in events.iter_pages() %}
+                        {% if page_num %}
+                            {% if events.page == page_num %}
+                                <a class="active_page" href="{{ url_for('children.child_profile', child_id=child.child_id, page=page_num) }}">{{ page_num }}</a>
+                            {% else %}
+                                <a class="inactive_page" href="{{ url_for('children.child_profile', child_id=child.child_id, page=page_num) }}">{{ page_num }}</a>
+                            {% endif %}
+                        {% else %}
+                            <span class="ellipsis">...</span>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
         </div>
-    {% if events.pages > 1 %}
-        <div class="pagination">
-            {% for page_num in events.iter_pages() %}
-                {% if page_num %}
-                    {% if events.page == page_num %}
-                        <a class="active_page" href="{{ url_for('children.child_profile', child_id=child.child_id, page=page_num) }}">{{ page_num }}</a>
-                    {% else %}
-                        <a class="inactive_page" href="{{ url_for('children.child_profile', child_id=child.child_id, page=page_num) }}">{{ page_num }}</a>
-                    {% endif %}
-                {% else %}
-                    <span class="ellipsis">...</span>
-                {% endif %}
-            {% endfor %}
-        </div>
-    {% endif %}
     {% if current_user.role == 'manager' %}
-    <a href="{{ url_for('children.remove_child', child_id=child.child_id) }}">Remove Child</a>
+        <div class="modal_container profile_modal_container_{{ child.child_id }}">
+            <dialog class="modal" id="profile_modal_{{ child.child_id }}">
+                <h2>Remove Child</h2>
+                <p>Are you sure you want to remove {{ child.first_name }} from the database?</p>
+                <div class="delete_modal">
+                    <div class="delete_comment" data-url="{{ url_for('children.remove_child', child_id=child.child_id) }}" onclick="redirectToUrl(this)">
+                        <p>Remove</p>
+                    </div>
+                    <div class="cancel" onclick="cancelRemoveProfile({{ child.child_id }})">
+                        <p>Cancel</p>
+                    </div>
+
+                </div>
+            </dialog>
+        </div>
+        
     {% endif %}
 
 {% endblock %}

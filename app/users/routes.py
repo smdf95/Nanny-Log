@@ -180,7 +180,10 @@ def remove_user(user_id):
 def others_profile(user_id):
     user = User.query.get_or_404(user_id)
     nanny = Nanny.query.filter_by(user_id=user_id).first()
+    manager = Manager.query.filter_by(user_id=user_id).first()
     parent = Parent.query.filter_by(user_id=user_id).first()
     current_nanny = Nanny.query.filter_by(user_id=current_user.user_id).first()
     current_parent = Parent.query.filter_by(user_id=current_user.user_id).first()
-    return render_template('users/others_profile.html', user=user, nanny=nanny, parent=parent, current_nanny=current_nanny, current_parent=current_parent)
+    return render_template('users/others_profile.html', user=user, manager=manager, nanny=nanny, parent=parent, current_nanny=current_nanny, current_parent=current_parent, next=next)
+
+    

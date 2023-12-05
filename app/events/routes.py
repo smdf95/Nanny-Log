@@ -28,36 +28,36 @@ def activities():
     if request.method == 'POST':
         if form.validate_on_submit():
             selected_child_ids = form.child.data
-            selected_children = get_assigned_children(current_user, selected_child_ids)
+            selected_children = get_assigned_children(selected_child_ids)
+            print(selected_children)
             
+            event = Event(
+                event_time=datetime.now(),
+                event_type='Activities',
+                user_id=current_id
+            )
+            for child in selected_children:
+                event.children.append(child)
+            db.session.add(event)
+            db.session.commit()
 
-            for kid in selected_children:
-                event = Event(
-                    event_time=datetime.now(),
-                    event_type='Activities',
-                    user_id=current_id,
-                    child_id=kid.child_id,
+            if form.picture.data:
+                picture_file = save_event_picture(form.picture.data)
+                activity = Activity(
+                    description=form.description.data,
+                    picture=picture_file,
+                    event_id=event.event_id
                 )
-                db.session.add(event)
-                db.session.commit()
-                if form.picture.data:
-                    picture_file = save_event_picture(form.picture.data)
-                    activity = Activity(
-                        duration=form.duration.data,
-                        description=form.description.data,
-                        picture=picture_file,
-                        event_id=event.event_id
-                    )
-                else:
-                    activity = Activity(
-                        duration=form.duration.data,
-                        description=form.description.data,
-                        event_id=event.event_id
-                    )
+            else:
+                activity = Activity(
+                    description=form.description.data,
+                    event_id=event.event_id
+                )
 
-                db.session.add(activity)
-                db.session.commit()
-            return redirect(url_for('index'))
+            db.session.add(activity)
+            db.session.commit()
+        return redirect(url_for('index'))
+    
     return render_template('events/activities.html', title='Activities', 
     form=form, Child=Child)
 
@@ -82,35 +82,36 @@ def developmental():
     if request.method == 'POST':
         if form.validate_on_submit():
             selected_child_ids = form.child.data
-            selected_children = get_assigned_children(current_user, selected_child_ids)
+            selected_children = get_assigned_children(selected_child_ids)
             
 
-            for kid in selected_children:
-                event = Event(
-                    event_time=datetime.now(),
-                    event_type='Developmental',
-                    user_id=current_id,
-                    child_id=kid.child_id,
+        
+            event = Event(
+                event_time=datetime.now(),
+                event_type='Developmental',
+                    user_id=current_id
+            )
+            for child in selected_children:
+                event.children.append(child)
+            db.session.add(event)
+            db.session.commit()
+            if form.picture.data:
+                picture_file = save_event_picture(form.picture.data)
+                developmental = Developmental(
+                    description=form.description.data,
+                    picture=picture_file,
+                    event_id = event.event_id
                 )
-                db.session.add(event)
-                db.session.commit()
-                if form.picture.data:
-                    picture_file = save_event_picture(form.picture.data)
-                    developmental = Developmental(
-                        description=form.description.data,
-                        picture=picture_file,
-                        event_id = event.event_id
-                    )
-                else: 
-                    developmental = Developmental(
-                        description=form.description.data,
-                        event_id = event.event_id
+            else: 
+                developmental = Developmental(
+                    description=form.description.data,
+                    event_id = event.event_id
 
-                    )
-                db.session.add(developmental)
-                db.session.commit()
-                flash('Your log has been created!', 'success')
-            return redirect(url_for('index'))
+                )
+            db.session.add(developmental)
+            db.session.commit()
+            flash('Your log has been created!', 'success')
+        return redirect(url_for('index'))
     return render_template('events/developmental.html', title='Developmental', form=form, Child=Child)
         
 
@@ -136,38 +137,39 @@ def food():
     if request.method == 'POST':
         if form.validate_on_submit():
             selected_child_ids = form.child.data
-            selected_children = get_assigned_children(current_user, selected_child_ids)
+            selected_children = get_assigned_children(selected_child_ids)
             
 
-            for kid in selected_children:
-                event = Event(
-                    event_time=datetime.now(),
-                    event_type='Food',
-                    user_id=current_id,
-                    child_id=kid.child_id,
-                )
+            event = Event(
+                event_time=datetime.now(),
+                event_type='Food',
+                    user_id=current_id
+            )
+            for child in selected_children:
+                event.children.append(child)
                 db.session.add(event)
                 db.session.commit()
 
-                if form.picture.data:
-                    picture_file = save_event_picture(form.picture.data)
-                    food = Food(
-                        meal_type=form.meal_type.data,
-                        description=form.description.data,
-                        picture=picture_file,
-                        event_id=event.event_id
-                    )
-                else:
-                    food = Food(
-                        meal_type=form.meal_type.data,
-                        description=form.description.data,
-                        event_id=event.event_id
-                    )
-                    
-                db.session.add(food)
-                db.session.commit()
 
-            return redirect(url_for('index'))
+            if form.picture.data:
+                picture_file = save_event_picture(form.picture.data)
+                food = Food(
+                    meal_type=form.meal_type.data,
+                    description=form.description.data,
+                    picture=picture_file,
+                    event_id=event.event_id
+                )
+            else:
+                food = Food(
+                    meal_type=form.meal_type.data,
+                    description=form.description.data,
+                    event_id=event.event_id
+                )
+                
+            db.session.add(food)
+            db.session.commit()
+
+        return redirect(url_for('index'))
     return render_template('events/food.html', title='Food', 
     form=form, Child=Child)
 
@@ -192,27 +194,27 @@ def incident():
     if request.method == 'POST':
         if form.validate_on_submit():
             selected_child_ids = form.child.data
-            selected_children = get_assigned_children(current_user, selected_child_ids)
+            selected_children = get_assigned_children(selected_child_ids)
             
 
-            for kid in selected_children:
-                event = Event(
-                    event_time=datetime.now(),
-                    event_type='Incident',
-                    user_id=current_id,
-                    child_id=kid.child_id,
-                )
-                db.session.add(event)
-                db.session.commit()
-                incident = Incident(
-                    incident_type=form.incident_type.data,
-                    description=form.description.data,
-                    event_id=event.event_id
+            event = Event(
+                event_time=datetime.now(),
+                event_type='Incident',
+                    user_id=current_id
+            )
+            for child in selected_children:
+                event.children.append(child)
+            db.session.add(event)
+            db.session.commit()
+            incident = Incident(
+                incident_type=form.incident_type.data,
+                description=form.description.data,
+                event_id=event.event_id
 
-                )
-                db.session.add(incident)
-                db.session.commit()
-            return redirect(url_for('index'))
+            )
+            db.session.add(incident)
+            db.session.commit()
+        return redirect(url_for('index'))
     return render_template('events/incident.html', title='Incident', form=form, Child=Child)
 
 @events_blueprint.route('/medication', methods=['GET', 'POST'])
@@ -236,29 +238,29 @@ def medication():
     if request.method == 'POST':
         if form.validate_on_submit():
             selected_child_ids = form.child.data
-            selected_children = get_assigned_children(current_user, selected_child_ids)
+            selected_children = get_assigned_children(selected_child_ids)
             
 
-            for kid in selected_children:
-                event = Event(
-                    event_time=datetime.now(),
-                    event_type='Medication',
-                    user_id=current_id,
-                    child_id=kid.child_id,
-                )
-                db.session.add(event)
-                db.session.commit()
-                medication = Medication(
-                    medication_name=form.medication_name.data,
-                    amount=form.amount.data,
-                    reason=form.reason.data,
-                    time_given=form.time_given.data,
-                    event_id=event.event_id
+            event = Event(
+                event_time=datetime.now(),
+                event_type='Medication',
+                    user_id=current_id
+            )
+            for child in selected_children:
+                event.children.append(child)
+            db.session.add(event)
+            db.session.commit()
+            medication = Medication(
+                medication_name=form.medication_name.data,
+                amount=form.amount.data,
+                reason=form.reason.data,
+                time_given=form.time_given.data,
+                event_id=event.event_id
 
-                )
-                db.session.add(medication)
-                db.session.commit()
-            return redirect(url_for('index'))
+            )
+            db.session.add(medication)
+            db.session.commit()
+        return redirect(url_for('index'))
     return render_template('events/medication.html', title='Medication', form=form, Child=Child)
 
 @events_blueprint.route('/nappy', methods=['GET', 'POST'])
@@ -282,27 +284,27 @@ def nappy():
     if request.method == 'POST':
         if form.validate_on_submit():
             selected_child_ids = form.child.data
-            selected_children = get_assigned_children(current_user, selected_child_ids)
+            selected_children = get_assigned_children(selected_child_ids)
             
 
-            for kid in selected_children:
-                event = Event(
-                    event_time=datetime.now(),
-                    event_type='Nappy',
-                    user_id=current_id,
-                    child_id=kid.child_id,
-                )
-                db.session.add(event)
-                db.session.commit()
-                nappy = Nappy(
-                    nappy_type=form.nappy_type.data,
-                    condition=form.condition.data,
-                    event_id=event.event_id
+            event = Event(
+                event_time=datetime.now(),
+                event_type='Nappy',
+                    user_id=current_id
+            )
+            for child in selected_children:
+                event.children.append(child)
+            db.session.add(event)
+            db.session.commit()
+            nappy = Nappy(
+                nappy_type=form.nappy_type.data,
+                condition=form.condition.data,
+                event_id=event.event_id
 
-                )
-                db.session.add(nappy)
-                db.session.commit()
-            return redirect(url_for('index'))
+            )
+            db.session.add(nappy)
+            db.session.commit()
+        return redirect(url_for('index'))
     return render_template('events/nappy.html', title='Nappy', form=form, Child=Child)
 
 @events_blueprint.route('/note', methods=['GET', 'POST'])
@@ -326,26 +328,26 @@ def note():
     if request.method == 'POST':
         if form.validate_on_submit():
             selected_child_ids = form.child.data
-            selected_children = get_assigned_children(current_user, selected_child_ids)
+            selected_children = get_assigned_children(selected_child_ids)
             
 
-            for kid in selected_children:
-                event = Event(
-                    event_time=datetime.now(),
-                    event_type='Note',
-                    user_id=current_id,
-                    child_id=kid.child_id,
-                )
-                db.session.add(event)
-                db.session.commit()
-                note = Note(
-                    description=form.description.data,
-                    event_id=event.event_id
+            event = Event(
+                event_time=datetime.now(),
+                event_type='Note',
+                    user_id=current_id
+            )
+            for child in selected_children:
+                event.children.append(child)
+            db.session.add(event)
+            db.session.commit()
+            note = Note(
+                description=form.description.data,
+                event_id=event.event_id
 
-                )
-                db.session.add(note)
-                db.session.commit()
-            return redirect(url_for('index'))
+            )
+            db.session.add(note)
+            db.session.commit()
+        return redirect(url_for('index'))
     return render_template('events/note.html', title='Note', form=form, Child=Child)
 
 @events_blueprint.route('/picture', methods=['GET', 'POST'])
@@ -369,35 +371,35 @@ def picture():
     if request.method == 'POST':
         if form.validate_on_submit():
             selected_child_ids = form.child.data
-            selected_children = get_assigned_children(current_user, selected_child_ids)
+            selected_children = get_assigned_children(selected_child_ids)
             
 
-            for kid in selected_children:
-                event = Event(
-                    event_time=datetime.now(),
-                    event_type='Picture',
-                    user_id=current_id,
-                    child_id=kid.child_id,
+            event = Event(
+                event_time=datetime.now(),
+                event_type='Picture',
+                    user_id=current_id
+            )
+            for child in selected_children:
+                event.children.append(child)
+            db.session.add(event)
+            db.session.commit()
+            if form.picture.data:
+                picture_file = save_event_picture(form.picture.data)
+                picture = Picture(
+                    caption=form.caption.data,
+                    picture_file=picture_file,
+                    event_id=event.event_id
+
                 )
-                db.session.add(event)
-                db.session.commit()
-                if form.picture.data:
-                    picture_file = save_event_picture(form.picture.data)
-                    picture = Picture(
-                        caption=form.caption.data,
-                        picture_file=picture_file,
-                        event_id=event.event_id
+            else:
+                picture = Picture(
+                    caption=form.caption.data,
+                    event_id=event.event_id
+                )
 
-                    )
-                else:
-                    picture = Picture(
-                        caption=form.caption.data,
-                        event_id=event.event_id
-                    )
-
-                db.session.add(picture)
-                db.session.commit()
-            return redirect(url_for('index'))
+            db.session.add(picture)
+            db.session.commit()
+        return redirect(url_for('index'))
     return render_template('events/picture.html', title='Picture', form=form, Child=Child)
 
 @events_blueprint.route('/sleep', methods=['GET', 'POST'])
@@ -421,26 +423,27 @@ def sleep():
     if request.method == 'POST':
         if form.validate_on_submit():
             selected_child_ids = form.child.data
-            selected_children = get_assigned_children(current_user, selected_child_ids)
+            selected_children = get_assigned_children(selected_child_ids)
             
 
-            for kid in selected_children:
-                event = Event(
-                    event_time=datetime.now(),
-                    event_type='Sleep',
-                    user_id=current_id,
-                    child_id=kid.child_id,
-                )
-                db.session.add(event)
-                db.session.commit()
-                sleep = Sleep(
-                    sleep_start=form.sleep_start.data,
-                    sleep_end=form.sleep_end.data,
-                    event_id=event.event_id
-                )
-                db.session.add(sleep)
-                db.session.commit()
-            return redirect(url_for('index'))
+
+            event = Event(
+                event_time=datetime.now(),
+                event_type='Sleep',
+                    user_id=current_id
+            )
+            for child in selected_children:
+                event.children.append(child)
+            db.session.add(event)
+            db.session.commit()
+            sleep = Sleep(
+                sleep_start=form.sleep_start.data,
+                sleep_end=form.sleep_end.data,
+                event_id=event.event_id
+            )
+            db.session.add(sleep)
+            db.session.commit()
+        return redirect(url_for('index'))
     return render_template('events/sleep.html', title='Sleep', 
     form=form, Child=Child)
 
@@ -449,7 +452,14 @@ def sleep():
 @login_required
 def post(event_id):
     event = Event.query.get(event_id)
-    comments = Comment.query.filter_by(event_id=event_id).order_by(Comment.comment_time.desc()).all()
+
+    page = request.args.get('page', 1, type=int)
+
+    comments = Comment.query\
+        .filter_by(event_id=event_id)\
+        .order_by(Comment.comment_time.desc())\
+        .paginate(page=page, per_page=15)
+
     
 
     form = CommentForm()
@@ -482,12 +492,31 @@ def delete_comment(comment_id):
 @events_blueprint.route('/delete_event/<int:event_id>', methods=['GET', 'POST'])
 @login_required
 def delete_event(event_id):
-    event = Event.query.get(event_id)
+    event = Event.query.filter_by(event_id=event_id).first()
     comments = Comment.query.filter_by(event_id=event_id).all()
     if comments:
         for comment in comments:
             db.session.delete(comment)
             db.session.commit()
+    
+    if event.event_type == 'Activities':
+        Activity.query.filter_by(event_id=event.event_id).delete()
+    elif event.event_type == 'Developmental':
+        Developmental.query.filter_by(event_id=event.event_id).delete()
+    elif event.event_type == 'Food':
+        Food.query.filter_by(event_id=event.event_id).delete()
+    elif event.event_type == 'Incident':
+        Incident.query.filter_by(event_id=event.event_id).delete()
+    elif event.event_type == 'Medication':
+        Medication.query.filter_by(event_id=event.event_id).delete()
+    elif event.event_type == 'Nappy':
+        Nappy.query.filter_by(event_id=event.event_id).delete()
+    elif event.event_type == 'Note':
+        Note.query.filter_by(event_id=event.event_id).delete()
+    elif event.event_type == 'Sleep':
+        Sleep.query.filter_by(event_id=event.event_id).delete()
+    
+                
     if event.user_id == current_user.user_id or current_user.role == 'manager':
         db.session.delete(event)
         db.session.commit()

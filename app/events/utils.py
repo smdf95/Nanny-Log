@@ -36,8 +36,8 @@ def save_event_picture(form_picture):
     i.save(picture_path, quality=95)
     return picture_fn
 
-def get_assigned_children(user, child_ids):
+def get_assigned_children(child_ids):
     if not isinstance(child_ids, list):
-        child_ids = [child_ids]  # Transform the single ID into a list
+        child_ids = [child_ids] 
 
     return Child.query.filter(Child.child_id.in_(child_ids)).all()

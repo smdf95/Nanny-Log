@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block main %}
+    <h1>{{ title }}</h1>
+    {% if current_user.role == "nanny" %}
+        {% for child in nanny.children %}
+            <div class="profile">
+                <div class="profile_picture">
+                    <a href="{{ url_for('children.child_profile', child_id=child.child_id) }}">
+                    <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="{{ child.first_name }}" width="100" height="100">
+                    </a>
+                </div>
+                <div class="profile_info">
+                    
+                    <h4><a href="{{ url_for('children.child_profile', child_id=child.child_id) }}">{{ child.first_name }} {{ child.last_name }}</a></h4>
+                </div>
+            </div>
+        {% endfor %}
+    {% elif current_user.role == "parent" %}
+        {% for child in parent.children %}
+            <div class="profile">
+                <div class="profile_picture">
+                    <a href="{{ url_for('children.child_profile', child_id=child.child_id) }}">
+                        <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="{{ child.first_name }}" width="100" height="100">
+                    </a>
+                </div>
+                <div class="profile_info">
+                <h4><a href="{{ url_for('children.child_profile', child_id=child.child_id) }}">{{ child.first_name }} {{ child.last_name }}</a></h4>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endblock %}

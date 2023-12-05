@@ -8,118 +8,223 @@
         <div class="profile_info">
             <h1>{{ user.first_name }} {{ user.last_name }} ({{ user.role | capitalize }})</h1>
             <h3>{{ user.email }}</h3>
+            <div class="delete_comment open_modal" onclick="showRemoveProfileModal({{ user.user_id }})">
+                <p>Delete Profile</p>
+            </div>
         </div>
     </div>
 
     <div class="child_assigned">
         <h2>Children</h2>
-        {% if user.role == 'parent' %}
-            {% if current_user.role == 'manager' %}
-                {% for child in parent.children %}
-                    <div class="profile">
-                        <div class="profile_picture">
-                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
-                            <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
-                            </a>
+        <div class="profiles">
+
+            {% if user.role == 'manager' %}
+                {% if current_user.role == 'manager' %}
+                    {% for child in manager.children %}
+                        <div class="profile children">
+                            <div class="smaller_profile_picture">
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                                <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
+                                </a>
+                            </div>
+                            <div class="profile_info">
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                                <h3>{{ child.first_name }} {{ child.last_name }}</h3>
+                                </a>
+                            </div>
                         </div>
-                        <div class="profile_info">
-                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
-                            <h3>{{ child.first_name }} {{ child.last_name }}</h3>
-                            </a>
-                            <a href="{{ url_for('children.remove_parent_association', child_id=child.child_id, parent_id=parent.parent_id)}}">Remove Child</a>
+                    {% endfor %}
+                    {% elif current_user.role == 'nanny' %}
+                    {% for child in manager.children %}
+                        {% if child in current_nanny.children %}
+                        <div class="profile children">
+                            <div class="smaller_profile_picture">
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                                <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="{{child.first_name }} {{ child.last_name }} Profile Picture">
+                                </a>
+                            </div>
+                            <div class="profile_info">
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                                <h3>{{ child.first_name }} {{ child.last_name }}</h3>
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                {% endfor %}
-            {% elif current_user.role == 'nanny' %}
-                {% for child in parent.children %}
-                    {% if child in current_nanny.children %}
-                    <div class="profile">
-                        <div class="profile_picture">
-                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
-                            <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
-                            </a>
+                        {% endif %}
+                    {% endfor %}
+                {% elif current_user.role == 'parent' %}
+                    {% for child in manager.children %}
+                        {% if child in current_parent.children %}
+                        <div class="profile">
+                            <div class="smaller_profile_picture">
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                                <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
+                                </a>
+                            </div>
+                            <div class="profile_info">
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                                <h3>{{ child.first_name }} {{ child.last_name }}</h3>
+                                </a>
+                            </div>
                         </div>
-                        <div class="profile_info">
-                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
-                            <h3>{{ child.first_name }} {{ child.last_name }}</h3>
-                            </a>
-                        </div>
-                    </div>
-                    {% endif %}
-                {% endfor %}
-            {% elif current_user.role == 'parent' %}
-                {% for child in parent.children %}
-                    {% if child in current_parent.children %}
-                    <div class="profile">
-                        <div class="profile_picture">
-                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
-                            <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
-                            </a>
-                        </div>
-                        <div class="profile_info">
-                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
-                            <h3>{{ child.first_name }} {{ child.last_name }}</h3>
-                            </a>
-                        </div>
-                    </div>
-                    {% endif %}
-                {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
             {% endif %}
-        {% elif user.role == 'nanny' %}
-            {% if current_user.role == 'manager' %}
-                {% for child in nanny.children %}
-                    <div class="profile">
-                        <div class="profile_picture">
-                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
-                            <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
-                            </a>
+            {% if user.role == 'parent' %}
+                {% if current_user.role == 'manager' %}
+                    {% for child in parent.children %}
+                        <div class="profile children">
+                            <div class="smaller_profile_picture">
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                                <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
+                                </a>
+                            </div>
+                            <div class="profile_info">
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                                <h3>{{ child.first_name }} {{ child.last_name }}</h3>
+                                </a>
+                                <div class="open_modal" onclick="showRemoveParentModal({{ child.child_id }})">
+                                    <p>Remove as Parent</p>
+                                </div>
+                                <div class="parent_modal_container parent_modal_container_{{ child.child_id }}">
+                                    <dialog class="parent_modal" id="parent_modal_{{ child.child_id }}">
+                                        <h2>Remove as Parent</h2>
+                                        <p>Are you sure you want to remove {{parent.user.first_name}} as a parent of {{ child.first_name }}?</p>
+                                        <div class="delete_modal">
+                                            <div class="delete_comment" data-url="{{ url_for('children.remove_parent_association', child_id=child.child_id, parent_id=parent.parent_id, next='parent')}}" onclick="redirectToUrl(this)">
+                                                <p>Remove</p>
+                                            </div>
+                                            <div class="cancel" onclick="cancelRemoveParent({{ child.child_id }})">
+                                                <p>Cancel</p>
+                                            </div>
+                                        </div>
+                                    </dialog>
+                                </div>
+                            </div>
                         </div>
-                        <div class="profile_info">
-                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
-                            <h3>{{ child.first_name }} {{ child.last_name }}</h3>
-                            </a>
-                            <a href="{{ url_for('children.remove_nanny_association', child_id=child.child_id, nanny_id=nanny.nanny_id)}}">Remove Child</a>
+                    {% endfor %}
+                {% elif current_user.role == 'nanny' %}
+                    {% for child in parent.children %}
+                        {% if child in current_nanny.children %}
+                        <div class="profile children">
+                            <div class="smaller_profile_picture">
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                                <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="{{child.first_name }} {{ child.last_name }} Profile Picture">
+                                </a>
+                            </div>
+                            <div class="profile_info">
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                                <h3>{{ child.first_name }} {{ child.last_name }}</h3>
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                {% endfor %}
-            {% elif current_user.role == 'nanny' %}
-                {% for child in nanny.children %}
-                    {% if child in current_nanny.children %}
-                    <div class="profile">
-                        <div class="profile_picture">
-                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
-                            <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
-                            </a>
+                        {% endif %}
+                    {% endfor %}
+                {% elif current_user.role == 'parent' %}
+                    {% for child in parent.children %}
+                        {% if child in current_parent.children %}
+                        <div class="profile children">
+                            <div class="smaller_profile_picture">
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                                <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
+                                </a>
+                            </div>
+                            <div class="profile_info">
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                                <h3>{{ child.first_name }} {{ child.last_name }}</h3>
+                                </a>
+                            </div>
                         </div>
-                        <div class="profile_info">
-                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
-                            <h3>{{ child.first_name }} {{ child.last_name }}</h3>
-                            </a>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% elif user.role == 'nanny' %}
+                {% if current_user.role == 'manager' %}
+                    {% for child in nanny.children %}
+                        <div class="profile children">
+                            <div class="smaller_profile_picture">
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                                <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
+                                </a>
+                            </div>
+                            <div class="profile_info">
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                                <h3>{{ child.first_name }} {{ child.last_name }}</h3>
+                                </a>
+                                <div class="open_modal" onclick="showRemoveNannyModal({{ child.child_id }})">
+                                    <p>Remove as Nanny</p>
+                                </div>
+                                <div class="nanny_modal_container nanny_modal_container_{{ child.child_id }}">
+                                    <dialog class="nanny_modal" id="nanny_modal_{{ child.child_id }}">
+                                        <h2>Remove as Nanny</h2>
+                                        <p>Are you sure you want to remove {{ nanny.user.first_name}} as a nanny of {{ child.first_name }}?</p>
+                                        <div class="delete_modal">
+                                            <div class="delete_comment" data-url="{{ url_for('children.remove_nanny_association', child_id=child.child_id, nanny_id=nanny.nanny_id, next='nanny')}}" onclick="redirectToUrl(this)">
+                                                <p>Remove</p>
+                                            </div>
+                                            <div class="cancel" onclick="cancelRemoveNanny({{ child.child_id }})">
+                                                <p>Cancel</p>
+                                            </div>
+                                        </div>
+                                    </dialog>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    {% endif %}
-                {% endfor %}
-            {% elif current_user.role == 'parent' %}
-                {% for child in nanny.children %}
-                    {% if child in current_parent.children %}
-                    <div class="profile">
-                        <div class="profile_picture">
-                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
-                            <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
-                            </a>
+                    {% endfor %}
+                {% elif current_user.role == 'nanny' %}
+                    {% for child in nanny.children %}
+                        {% if child in current_nanny.children %}
+                        <div class="profile children">
+                            <div class="smaller_profile_picture">
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                                <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
+                                </a>
+                            </div>
+                            <div class="profile_info">
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                                <h3>{{ child.first_name }} {{ child.last_name }}</h3>
+                                </a>
+                            </div>
                         </div>
-                        <div class="profile_info">
-                            <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
-                            <h3>{{ child.first_name }} {{ child.last_name }}</h3>
-                            </a>
+                        {% endif %}
+                    {% endfor %}
+                {% elif current_user.role == 'parent' %}
+                    {% for child in nanny.children %}
+                        {% if child in current_parent.children %}
+                        <div class="profile children">
+                            <div class="smaller_profile_picture">
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                                <img src="{{ url_for('static', filename='profile_pics/' + child.picture) }}" alt="Child Picture">
+                                </a>
+                            </div>
+                            <div class="profile_info">
+                                <a href="{{ url_for('children.child_profile', child_id=child.child_id)}}">
+                                <h3>{{ child.first_name }} {{ child.last_name }}</h3>
+                                </a>
+                            </div>
                         </div>
-                    </div>
-                    {% endif %}
-                {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
             {% endif %}
-        {% endif %}
+        </div>
     </div>
     {% if current_user.role == 'manager' %}
-        <a href="{{ url_for('users.remove_user', user_id=user.user_id)}}">Delete Profile</a>
+    <div class="modal_container profile_modal_container_{{ user.user_id }}">
+        <dialog class="modal" id="profile_modal_{{ user.user_id }}">
+            <h2>Delete Profile</h2>
+            <p>Are you sure you want to delete {{ user.first_name }}'s profile?</p>
+            <div class="delete_modal">
+                <div class="delete_comment" data-url="{{ url_for('users.remove_user', user_id=user.user_id)}}" onclick="redirectToUrl(this)">
+                    <p>Delete</p>
+                </div>
+                <div class="cancel" onclick="cancelRemoveProfile({{ user.user_id }})">
+                    <p>Cancel</p>
+                </div>
+
+            </div>
+        </dialog>
+    </div>
+    
     {% endif %}
 {% endblock %}

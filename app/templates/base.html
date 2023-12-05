@@ -33,7 +33,7 @@
                     <li><a href="{{ url_for('index') }}">Home</a></li>
                     {% if current_user.is_authenticated %}
                         {% if current_user.role == 'nanny' or current_user.role == 'parent' %}
-                            <li><a href="{{ url_for('index') }}">My Kids</a></li>
+                            <li><a href="{{ url_for('children.my_kids') }}">My Kids</a></li>
                         {% endif %}
                         {% if current_user.role == 'manager' %}
                             <li><a href="{{ url_for('children.assign_child') }}">Assign Child</a></li>
@@ -79,9 +79,9 @@
         {% endblock %}
     </main>
     <footer>
-        <p>Copyright &copy; 2023 BeWell</p>
+        <p>Copyright &copy; 2023 NannyLog</p>
         <p>Built with Love and Compassion</p>
-        <a href="mailto:seaghan.fisher@gmail.com">Contact Us</a>
+        <a href="mailto:nannylogsapp@gmail.com">Contact Us</a>
     </footer>
 </body>
 </html>
