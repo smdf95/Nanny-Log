@@ -1,10 +1,35 @@
-from flask import render_template, request, redirect, url_for, flash, Blueprint
+from flask import (
+    render_template, 
+    request, 
+    redirect, 
+    url_for, 
+    flash, 
+    Blueprint
+)
+from flask_login import (
+    login_user, 
+    current_user, 
+    logout_user, 
+    login_required
+)
 from app import db, bcrypt
-from app.users.forms import LoginForm, RegistrationForm, UpdateProfileForm, ResetPasswordForm, RequestResetForm, ChangePasswordForm
-from app.models import User, Nanny, Parent, Manager, Parent
-from app.users.utils import save_profile_picture, send_reset_email, manager_required
-from flask_login import login_user, current_user, logout_user, login_required
+from app.models import User, Nanny, Parent, Manager, Child
+from app.users.forms import (
+    LoginForm, 
+    RegistrationForm, 
+    UpdateProfileForm, 
+    ResetPasswordForm, 
+    RequestResetForm, 
+    ChangePasswordForm
+)
+from app.users.utils import (
+    save_profile_picture, 
+    send_reset_email, 
+    manager_required
+)
 from sqlalchemy import text
+
+
 
 users_blueprint = Blueprint('users', __name__)
 
@@ -33,6 +58,9 @@ def register():
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         managers = Manager.query.all()
+        parents = Parent.query.all()
+        nannies = Nanny.query.all()
+        children = Child.query.all()
         user = User(
             first_name=form.first_name.data,
             last_name=form.last_name.data, 
@@ -65,6 +93,12 @@ def register():
             manager = Manager(
                 user_id=user.user_id,
             )
+            for parent in parents:
+                manager.parents.append(parent)
+            for nanny in nannies:
+                manager.nannies.append(nanny)
+            for child in children:
+                manager.children.append(child)
             db.session.add(manager)
             db.session.commit()
 

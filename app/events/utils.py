@@ -1,9 +1,10 @@
 import os
 import secrets
 from PIL import Image, ExifTags
+
 from app import app
 from app.models import Child
-from flask_login import current_user
+
 
 def save_event_picture(form_picture):
     random_hex = secrets.token_hex(8)

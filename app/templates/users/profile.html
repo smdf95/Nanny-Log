@@ -24,7 +24,7 @@
                     <span>{{ error }}</span>
                 {% endfor %}
             {% endif %}
-            {{ form.picture.label }}
+            <h3>Update Profile Picture</h3>
             {{ form.picture }}
             {{ form.submit }}
             <p><a href="{{ url_for('users.change_password', user_id=current_user.user_id) }}">Change Password</a></p>

@@ -1,9 +1,16 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, PasswordField, BooleanField, SubmitField, SelectField, ValidationError
-from wtforms.validators import DataRequired, Email, EqualTo, Length
 from flask_wtf.file import FileField, FileAllowed
-from app.models import User
+from wtforms import (
+    StringField, 
+    PasswordField, 
+    BooleanField, 
+    SubmitField, 
+    SelectField
+)
+from wtforms.validators import DataRequired, Email, EqualTo, Length
 from flask_login import current_user
+from app.models import User
+
 
 def validate_not_none(form, field):
     if field.data is None:

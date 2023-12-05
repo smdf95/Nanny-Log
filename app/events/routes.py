@@ -1,10 +1,45 @@
 from datetime import datetime
-from flask import render_template, redirect, url_for, flash, Blueprint, request
-from app import db
-from app.events.forms import ActivitiesForm, SleepForm, FoodForm, DevelopmentalForm, IncidentForm, MedicationForm, NappyForm, NoteForm, CommentForm, PictureForm
-from app.events.utils import save_event_picture, get_assigned_children
-from app.models import Nanny, Manager, User, Child, Activity, Event, Sleep, Food, Developmental, Incident, Medication, Nappy, Note, Comment, Picture
+from flask import (
+    render_template, 
+    redirect, 
+    url_for, 
+    flash, 
+    Blueprint, 
+    request
+)
 from flask_login import current_user, login_required
+from app import db
+from app.models import (
+    Nanny, 
+    Manager, 
+    User, 
+    Child, 
+    Activity, 
+    Event, 
+    Sleep, 
+    Food, 
+    Developmental, 
+    Incident, 
+    Medication, 
+    Nappy, 
+    Note, 
+    Comment, 
+    Picture
+)
+from app.events.forms import (
+    ActivitiesForm, 
+    SleepForm, 
+    FoodForm, 
+    DevelopmentalForm, 
+    IncidentForm, 
+    MedicationForm, 
+    NappyForm, 
+    NoteForm, 
+    CommentForm, 
+    PictureForm
+)
+from app.events.utils import save_event_picture, get_assigned_children
+
 
 events_blueprint = Blueprint('events', __name__)
 

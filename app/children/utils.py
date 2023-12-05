@@ -3,10 +3,12 @@ import secrets
 from datetime import date
 from PIL import Image, ExifTags
 from functools import wraps
+
 from flask import abort
 from app import app
-from app.models import Nanny, Parent, Manager, Parent, Child
+from app.models import Nanny, Parent, Manager, Child
 from flask_login import current_user
+
 
 
 from functools import wraps

@@ -1,10 +1,41 @@
-from flask import render_template, request, redirect, url_for, flash, Blueprint
+from flask import (
+    render_template, 
+    request, 
+    redirect, 
+    url_for, 
+    flash, 
+    Blueprint
+)
+from flask_login import current_user, login_required
 from app import db
 from app.children.forms import ChildForm, AssignChild, EditProfileForm
-from app.models import User, Nanny, Parent, Manager, Parent, Child, Event, Activity, Food, Incident, Developmental, Nappy, Note, Sleep, Medication
-from flask_login import current_user, login_required
-from .utils import save_profile_picture, get_assigned_nannies, get_assigned_parents, manager_required, association_required, calculate_age, get_assigned_children
+from app.models import (
+    User, 
+    Nanny, 
+    Parent,
+    Manager, 
+    Child, 
+    Event, 
+    Activity, 
+    Food, 
+    Incident, 
+    Developmental, 
+    Nappy, 
+    Note, 
+    Sleep, 
+    Medication
+)
+from .utils import (
+    save_profile_picture, 
+    get_assigned_nannies, 
+    get_assigned_parents, 
+    manager_required, 
+    association_required, 
+    calculate_age, 
+    get_assigned_children
+)
 from sqlalchemy import text
+
 
 children_blueprint = Blueprint('children', __name__)
 
