@@ -42,7 +42,8 @@
 
 Séaghan (Shane) Fisher - seaghan.fisher@gmail.com
 
-Project Link: [https://github.com/smdf95/BeWell](https://github.com/smdf95/BeWell)
+<a href="https://github.com/smdf95/Nanny-Log">Code Link</a>
+<a href="https://nanny-log.onrender.com/">Webapp Link</a>
 
 
 
