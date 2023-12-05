@@ -6,11 +6,11 @@
     <form class="login_form" method="POST" action="">
         <h2>Log In</h2>
         {{ form.hidden_tag() }}
-            {{ form.email(placeholder="Email") }}
-            {{ form.password(placeholder="Password") }}
-            {{ form.remember.label }}{{form.remember }}
-            <p><a href="{{ url_for('users.forgot_password') }}">Forgot Password?</a></p>
-            <button type="submit" class="neat-submit-button">Sign In</button>
+        {{ form.email(placeholder="Email") }}
+        {{ form.password(placeholder="Password") }}
+        {{ form.remember.label }}{{form.remember }}
+        <p><a href="{{ url_for('users.forgot_password') }}">Forgot Password?</a></p>
+        {{ form.submit() }}
         <p>Not a member? <a href="{{ url_for('users.register') }}">Sign up</a></p>
     </form>
 </div>

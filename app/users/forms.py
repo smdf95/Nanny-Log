@@ -29,6 +29,8 @@ class RegistrationForm(FlaskForm):
     role = SelectField('Role', choices=[(None, 'Select Role'),('manager', 'Manager'), ('nanny', 'Nanny'), ('parent', 'Parent')], default=None, validators=[validate_not_none])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=8)])
     password2 = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
+    submit = SubmitField('Register')
+
 
 
 class UpdateProfileForm(FlaskForm):

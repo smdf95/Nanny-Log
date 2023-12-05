@@ -31,7 +31,7 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
-        manager = Manager.query.filter_by(manager_id=1).first()
+        managers = Manager.query.all()
         user = User(
             first_name=form.first_name.data,
             last_name=form.last_name.data, 
@@ -44,18 +44,18 @@ def register():
         if form.role.data == 'nanny':
             nanny = Nanny(
                 user_id=user.user_id,
-                manager_id=1
             )
-            nanny.managers.append(manager)
+            for manager in managers:
+                nanny.managers.append(manager)
             
             db.session.add(nanny)
             db.session.commit()
         elif form.role.data == 'parent':
             parent = Parent(
                 user_id=user.user_id,
-                manager_id=1
             )
-            parent.managers.append(manager)
+            for manager in managers:
+                parent.managers.append(manager)
             db.session.add(parent)
             db.session.commit()
         
