@@ -2,7 +2,10 @@
 
   <p align="center">
     This project is intended as a Nanny Log webapp designed to conveniently update parents with the everyday events of their children. It has features such as adding events for multiple children at once, commenting on the events, viewing old logs. Managers can add children to the database and assign them to the appropriate parents and nannies. Manager's can also remove and reassign profiles and associations with ease.
-    <br />
+    <br>
+    <br>
+    Click 'View Demo' below to check out the webapp. For convenience, login using 'shane@mail.com' with 'test1234' as the password.
+    <br>
     <a href="https://github.com/smdf95/Nanny-Log"><strong>Explore the docs »</strong></a>
     <br />
     <br />
